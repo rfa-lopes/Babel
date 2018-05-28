@@ -77,6 +77,11 @@ function eventHandler(a, kind, action) {
     return a;
 }
 
+function eventHandler2(a, kind, action) { // funcao recomendada pelo prof no forum
+    a[kind] = action;
+    return a;
+}
+
 function h1(target, text) {
     var a = document.createElement("H1");
     var b = document.createTextNode(text);
@@ -167,6 +172,36 @@ function screen0() {
     eventHandler(f, "onchange", "processLocalFile(event, runLanguage);");
 }
 
+function screenHomePage() {
+    var body = document.body;
+    // start with a blank page
+    body.innerHTML = '';
+    
+    var nodesLT = xmlDoc.getElementsByTagName("LESSON");
+
+    h1(body, "Escolha qual a lição que pretende realizar:");
+    hr(body);
+    for (var i =0; i < nodesLT.length ;i++) {
+        var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+        h1(d, "Esta lição é a Número "+(i+1)+":");
+        var nodesKPB = nodesLT[i].childNodes;
+        h1(d,nodesKPB.length+"\n");
+        // first line
+        var p2 = p(d, "padding-left:20px;");
+        var b1 = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
+        eventHandler2(b1, "onclick", function () { lessonOfScreens(nodesKPB); });
+        hr(body);
+    }
+}
+
+function lessonOfScreens(nodes) {
+    var subNode;
+    for(var j=0; j < nodes.length;j++){
+        subNode=nodes[i];
+        screen1();
+    }
+}
+
 function screen1() {
     var body = document.body;
 // start with a blank page
@@ -193,7 +228,7 @@ function screen1() {
     text(p2, 16, " ");
     var b1 = inpuButton(p2, "check", "Check", "lime");
     eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, 'What time is it?');");
-
+    
     hr(body);
 }
 
@@ -205,7 +240,7 @@ function runLanguage(text) {
     var nodes = xmlDoc.getElementsByTagName("LANGNAME");
     if( nodes.length == 1 ) {
         languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
-        screen1();
+        screenHomePage();
     }
     else {
         alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
