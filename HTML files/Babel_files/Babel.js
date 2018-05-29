@@ -172,33 +172,132 @@ function screen0() {
     eventHandler(f, "onchange", "processLocalFile(event, runLanguage);");
 }
 
-function screenHomePage() {
-    var body = document.body;
-    // start with a blank page
-    body.innerHTML = '';
-    
-    var nodesLT = xmlDoc.getElementsByTagName("LESSON");
+function isLanguageExtraAlphabets(){
+    return (xmlDoc.getElementsByTagName("CLASS")[0].nodeValue == "LanguageExtraAlphabets"); 
+}
 
-    h1(body, "Escolha qual a lição que pretende realizar:");
-    hr(body);
-    for (var i =0; i < nodesLT.length ;i++) {
-        var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
-        h1(d, "Esta lição é a Número "+(i+1)+":");
-        var nodesKPB = nodesLT[i].childNodes;
-        h1(d,nodesKPB.length+"\n");
-        // first line
-        var p2 = p(d, "padding-left:20px;");
-        var b1 = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
-        eventHandler2(b1, "onclick", function () { lessonOfScreens(nodesKPB); });
+class Language {
+    constructor(lName,xmlDocument){
+        this.lName = lName;
+        this.xmlDocument = xmlDocument;
+        this.lessons = xmlDocument.getElementsByTagName("LESSON");
+    }
+
+    languageName() {return this.lName;}
+
+    numberOfLessons() {return this.lessons.length;}
+
+    HomepageScreen() {
+        var homePage = new HomePage(this.lessons);
+        return homePage.defineHomePage();
+    }
+
+    KeyboardScreen() {}
+
+    PairsScreen() {}
+
+    BlocksScreen() {}
+}
+
+class LanguageExtraAlphabets extends Language {
+    constructor(lName,xmlDocument) {
+        super(lName,xmlDocument);
+    }
+
+    SymbolsScreen() {}
+}
+
+class DynamicHTML {
+    constructor() {
+        this.body = document.body;
+    }
+
+    createBlankHTMLPage () {
+        this.body.innerHTML = '';
+        return this.body;
+    }
+
+}
+
+class HomePage {
+    constructor(xmlLessons) {
+        this.xmlLessons = xmlLessons;
+    }
+
+    defineHomePage(){
+        var htmlPage = new DynamicHTML();
+        var body = htmlPage.createBlankHTMLPage();
+
+        var body = document.body;
+        // start with a blank page
+        body.innerHTML = '';
+
+        h1(body, "Escolha qual a lição que pretende realizar:");
         hr(body);
+        for (var i = 0; i < this.xmlLessons.length ;i++) {
+            var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+            h1(d, "Esta lição é a Número "+(i+1)+":");
+            var nodesKPB = this.xmlLessons[i].childNodes;
+            h1(d,nodesKPB.length+"\n");
+            // first line
+            var p2 = p(d, "padding-left:20px;");
+            var b1 = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
+            eventHandler(b1, "onclick", "screen1();");
+            hr(body);
+        }
     }
 }
 
-function lessonOfScreens(nodes) {
-    var subNode;
-    for(var j=0; j < nodes.length;j++){
-        subNode=nodes[i];
-        screen1();
+class Screen {
+    constructor(xmlDocument) {
+        this.xmlDocument = xmlDocument;
+    }
+}
+
+class Keyboard extends Screen {
+    constructor(xmlDocument) {
+        super(xmlDocument);
+        this.keyboardPrompt();
+        this.keyboardOriginal();
+        this.keyboardSound();
+    }
+
+    keyboardPrompt() {
+        this.prompt = this.xmlDocument.getElementsByTagName("PROMPT")[0].nodeValue;
+    }
+
+    keyboardOriginal() {
+        this.original = this.xmlDocument.getElementsByTagName("ORIGINAL")[0].nodeValue;
+    }
+
+    keyboardSound() {
+        this.sound = this.xmlDocument.getElementsByTagName("SOUND")[0].nodeValue;
+    }
+
+    defineKeyboardPage(){
+        var htmlPage = new DynamicHTML();
+        var body = htmlPage.createBlankHTMLPage();
+        
+        // a div, only because we want a border
+        var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+        h1(d, this.prompt);
+
+        // first line
+        var p1 = p(d, "padding-left:40px; word-spacing:50px;");
+        var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
+        eventHandler(i, "onclick", "play(this.sound);");
+        text(p1, 16, " ");
+        text(p1, 32, this.original);
+
+        // second line
+        var p2 = p(d, "padding-left:20px;");
+        var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
+        eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
+        text(p2, 16, " ");
+        var b1 = inpuButton(p2, "check", "Check", "lime");
+        eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, 'What time is it?');");
+
+        hr(body);
     }
 }
 
@@ -240,7 +339,12 @@ function runLanguage(text) {
     var nodes = xmlDoc.getElementsByTagName("LANGNAME");
     if( nodes.length == 1 ) {
         languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
-        screenHomePage();
+        var languageToUse;
+        if(isLanguageExtraAlphabets())
+            languageToUse = new LanguageExtraAlphabets(languageName,xmlDoc);
+        else        
+            languageToUse = new Language(languageName,xmlDoc);
+        languageToUse.HomepageScreen();
     }
     else {
         alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');

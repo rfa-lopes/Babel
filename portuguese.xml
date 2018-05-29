@@ -67,7 +67,7 @@
        <SOUND>portuguese/sounds/por favor.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="2">
+  <LESSON ID="2">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>Muito obrigada</ORIGINAL>
@@ -91,7 +91,7 @@
        <SOUND>portuguese/sounds/Não, eu não me sinto bem.mp3</SOUND>
      </KEYBOARD>
   </LESSON>
-  <LESSON id="3">
+  <LESSON ID="3">
      <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>São 2:00, agora.</ORIGINAL>
@@ -106,7 +106,7 @@
        <SOUND>portuguese/sounds/Maria é professora.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="4">
+  <LESSON ID="4">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>Como se chama?</ORIGINAL>
@@ -114,7 +114,7 @@
        <SOUND>portuguese/sounds/Como se chama.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="5">
+  <LESSON ID="5">
    <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>Eu sou Tanaka. Prazer em conhecê-lo.</ORIGINAL>
@@ -124,7 +124,7 @@
        <SOUND>portuguese/sounds/Eu sou Tanaka. Prazer em conhecê-lo.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="6">
+  <LESSON ID="6">
    <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>Fala inglês?</ORIGINAL>
@@ -132,7 +132,7 @@
        <SOUND>portuguese/sounds/Fala inglês.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="7">
+  <LESSON ID="7">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>Como está?</ORIGINAL>
@@ -142,7 +142,7 @@
        <SOUND>portuguese/sounds/Como está.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="8">
+  <LESSON ID="8">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>Lamento imenso.</ORIGINAL>

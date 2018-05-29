@@ -3,7 +3,7 @@
   <LANGNAME>Japanese</LANGNAME>
   <CLASS>LanguageExtraAlphabets</CLASS>
   <SOUNDSPREFIX>http://ctp.di.fct.unl.pt/miei/lap/projs/proj2018-3/files/resources/sounds/</SOUNDSPREFIX>
-  <LESSON id="1">
+  <LESSON ID="1">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>何時ですか</ORIGINAL>
@@ -74,7 +74,7 @@
        <SOUND>japanese/sentences/おねがいします.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="2">
+  <LESSON ID="2">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>どうもありがとう</ORIGINAL>
@@ -105,7 +105,7 @@
        <SOUND>japanese/sentences/いいえ、げんきではありません.mp3</SOUND>
      </KEYBOARD>
   </LESSON>
-  <LESSON id="3">
+  <LESSON ID="3">
      <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>今は二時です</ORIGINAL>
@@ -120,7 +120,7 @@
        <SOUND>japanese/sentences/マリアは先生です.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="4">
+  <LESSON ID="4">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>お名前は何ですか</ORIGINAL>
@@ -128,7 +128,7 @@
        <SOUND>japanese/sentences/お名前は何ですか.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="5">
+  <LESSON ID="5">
    <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>田中です、よろしく</ORIGINAL>
@@ -138,7 +138,7 @@
        <SOUND>japanese/sentences/田中です、よろしく.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="6">
+  <LESSON ID="6">
    <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>英語ははなせますか</ORIGINAL>
@@ -146,7 +146,7 @@
         <SOUND>japanese/sentences/英語ははなせますか.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="7">
+  <LESSON ID="7">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>おげんきですか</ORIGINAL>
@@ -156,7 +156,7 @@
        <SOUND>japanese/sentences/おげんきですか.mp3</SOUND>
     </KEYBOARD>
   </LESSON>
-  <LESSON id="8">
+  <LESSON ID="8">
     <KEYBOARD>
        <PROMPT>Write this in English</PROMPT>
        <ORIGINAL>どうもすみません</ORIGINAL>
@@ -205,14 +205,13 @@
   <SYMBOLS id="3">
     <SYMBNAME>Kanji 1</SYMBNAME>
     <ALPHABET>一 二 三 四 五 六 七 八 九 十 百 千 万 円 時 日 本 人 月 火 水 木 金 土 曜 上 下 中 半 山 川 元 気 私 今 田 女 男 見 行 食 飲 天 東 西 南 北 口 出 右 左 分 先 生 大 学 外 国 京 子 小 会 社 父 母 高 校 毎 語 文 帰 入</ALPHABET>
-    <LATIN>one two three four five six seven eight nine ten hundred thousand ten_thousand yen time sun origin person moon fire water tree gold earth weekday above under inside half mountain river origin energy I now rice field woman man see go eat drink heaven east west south north mouth to exit right left minute previous birth big learning outside country capital child small to meet company father mother high school every word sentence return enter</LATIN>
+    <LATIN>one two three four five six seven eight nine ten hundred thousand ten_thousand yen time sun origin person moon fire water tree gold earth weekday above under inside half mountain river origin energy I now rice_field woman man see go eat drink heaven east west south north mouth exit right left minute previous birth big learning outside country capital child small meet company father mother high school every word sentence return enter</LATIN>
     <COMMENT>No sounds for Kanji</COMMENT>
   </SYMBOLS>
   <SYMBOLS id="4">
     <SYMBNAME>Kanji 2</SYMBNAME>
     <ALPHABET>員 新 聞 作 仕 事 電 車 休 言 読 思 次 何 午 後 前 名 白 雨 書 友 間 家 話 少 古 知 来 住 正 年 売 買 町 長 道 雪 立 自 夜 朝 持 手 紙 好 近 明 病 院 映 画 歌 市 所 強 有 旅 神 早 牛 使 働 連 別 度 赤 青 色</ALPHABET>
-    <LATIN>member new listen make serve thing electricity car rest say read think next what noon after before name white rain write friend between house speak little old know come live right year sell buy town long way snow stand self night morning hold hand paper favorite near bright isick institution to reflect picture sing city place strong to exist travel god early cow use work link separate time red blue color</LATIN>
+    <LATIN>member new listen make serve thing electricity car rest say read think next what noon after before name white rain write friend between house speak little old know come live right year sell buy town long way snow stand self night morning hold hand paper favorite near bright sick institution reflect picture sing city place strong exist travel god early cow use work link separate time red blue color</LATIN>
     <COMMENT>No sounds for Kanji</COMMENT>
   </SYMBOLS>
 </LANGUAGE>
-

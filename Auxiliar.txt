@@ -10,19 +10,3 @@ Como a criacao de paginas dinamica funciona :
 É  necessario criar uma pagina inicial que permite selecionar de entre as várias lições
     disponíveis, a que pretendemos realizar
 
-Vai ser necessário definir mais functions do 
-    tipo screen (acabar screenKEYBOARD, screenPAIRS, screenBLOCKS, etc...)
-
-
-class GenericLanguage {
-    constructor(){}
-}
-
-class Language extends GenericLanguage {
-    constructor(){}
-}
-
-class LanguageExtraAlphabets extends Language {
-    constructor(){}
-}
-
