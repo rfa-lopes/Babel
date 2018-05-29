@@ -173,7 +173,7 @@ function screen0() {
 }
 
 function isLanguageExtraAlphabets(){
-    return (xmlDoc.getElementsByTagName("CLASS")[0].nodeValue == "LanguageExtraAlphabets"); 
+    return (xmlDoc.getElementsByTagName("CLASS")[0].childNodes[0].nodeValue == "LanguageExtraAlphabets"); 
 }
 
 class Language {
@@ -228,17 +228,20 @@ class HomePage {
         var htmlPage = new DynamicHTML();
         var body = htmlPage.createBlankHTMLPage();
 
-        var body = document.body;
-        // start with a blank page
-        body.innerHTML = '';
-
         h1(body, "Escolha qual a lição que pretende realizar:");
         hr(body);
         for (var i = 0; i < this.xmlLessons.length ;i++) {
             var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
             h1(d, "Esta lição é a Número "+(i+1)+":");
-            var nodesKPB = this.xmlLessons[i].childNodes;
-            h1(d,nodesKPB.length+"\n");
+            var auxNodes = this.xmlLessons[i].childNodes;
+            var nodesKPB = {};
+            var nIndex = 0;
+            for(var w = 0; w < auxNodes.length; w++)
+                if(auxNodes[w].nodeName != "#text"){
+                    nodesKPB[nIndex] = auxNodes[w];
+                    nIndex++;
+                }
+            h1(d,nIndex+"\n");
             // first line
             var p2 = p(d, "padding-left:20px;");
             var b1 = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
@@ -340,10 +343,13 @@ function runLanguage(text) {
     if( nodes.length == 1 ) {
         languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
         var languageToUse;
-        if(isLanguageExtraAlphabets())
+        if(isLanguageExtraAlphabets()){
             languageToUse = new LanguageExtraAlphabets(languageName,xmlDoc);
-        else        
+            alert("It is a language with extra alphabets.");
+        }else{     
             languageToUse = new Language(languageName,xmlDoc);
+            alert("It is a language with latin alphabet.");
+        }
         languageToUse.HomepageScreen();
     }
     else {
