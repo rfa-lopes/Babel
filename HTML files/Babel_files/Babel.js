@@ -177,63 +177,88 @@ function isLanguageExtraAlphabets(){
 }
 
 class Language {
-    constructor(lName,xmlDocument){
-        this.lName = lName;
-        this.xmlDocument = xmlDocument;
-        this.lessons = xmlDocument.getElementsByTagName("LESSON");
+    constructor(xmlDocument){
+        this.lessons = [];
+        this.saveLanguageName(xmlDocument);
+        this.saveSoundPrefix(xmlDocument);
+        this.saveLessons(xmlDocument);
+        this.HomePage = new HomePage(this.lessons.length, this);
+        this.startHomepageScreen();
     }
 
-    languageName() {return this.lName;}
+    saveLanguageName(xmlDocument) {
+        this.lName = xmlDoc.getElementsByTagName("LANGNAME")[0].childNodes[0].nodeValue;
+    }
 
-    numberOfLessons() {return this.lessons.length;}
+    saveSoundPrefix(xmlDocument) {
+        this.soundPrefix = xmlDocument.getElementsByTagName("SOUNDSPREFIX")[0].childNodes[0].nodeValue;
+    }
 
-    HomepageScreen() {
-        var homePage = new HomePage(this.lessons);
-        return homePage.pageRendering();
+    saveLessons(xmlDocument) {
+        var xmlLessons = xmlDocument.getElementsByTagName("LESSON");
+        for(var i = 0; i < xmlLessons.length; i++){
+            this.lessons[i] = new Lesson(xmlLessons[i].childNodes);
+        }
+    }
+
+    startHomepageScreen() {
+        return this.HomePage.pageRendering();
+    }
+
+    startLesson(lessonIndex) {
+        //alert(lessonIndex);
+        return this.lessons[lessonIndex].nextExercise();
     }
  }
 
 class LanguageExtraAlphabets extends Language {
-    constructor(lName,xmlDocument) {
-        super(lName,xmlDocument);
+    constructor(xmlDocument) {
+        super(xmlDocument);
     }
 
     SymbolsScreen() {}
 }
-
+/*
 class DynamicHTML {
     constructor() {}
 
     // para criar buttons com static functions
 }
-
+*/
 class Lesson {
     constructor(xmlLessonInfo) {
-        this.xmlLessonInfo = xmlLessonInfo;
         this.exercises = [];
-        this.saveExercisesInArray();
-        this.nextExercise();
+        this.exercisesIndex = 0;
+        this.currentExercise = 0;
+        this.saveExercisesInArray(xmlLessonInfo);
         // podemos criar outro array com os exercicios errados , que necessitamos de voltar a repetir ou ir eliminando há medida que acerta
     }
 
-    saveExercisesInArray() {
-        for(var j = 0; j < this.xmlLessonInfo.lenght; j++)
-            if(this.xmlLessonInfo[j].nodeValue == "KEYBOARD"){
-                var xmlKeyBoard = this.xmlLessonInfo[j].childNodes;
-                exercises.push(new Keyboard(xmlKeyBoard, this));
-            }else if(this.xmlLessonInfo[j].nodeValue == "PAIRS"){
-                var xmlPairs = this.xmlLessonInfo[j].childNodes;
-                exercises.push(new Pairs(xmlPairs, this));
-            }else{
-                var xmlBlocks = this.xmlLessonInfo[j].childNodes;
-                exercises.push(new Blocks(xmlBlocks, this));
-            } 
+    saveExercisesInArray(xmlLessonInfo) {
+        //alert(xmlLessonInfo.length);
+        for(var j = 0; j < xmlLessonInfo.length; j++){
+            if(xmlLessonInfo[j].nodeName == "KEYBOARD"){
+                var xmlKeyBoard = xmlLessonInfo[j];
+                //alert(xmlLessonInfo[j]);
+                this.exercises[this.exercisesIndex++] = new Keyboard(xmlKeyBoard, this);
+                //alert(this.exercises[this.exercisesIndex-1]);
+            }else if(xmlLessonInfo[j].nodeName == "PAIRS"){
+                var xmlPairs = xmlLessonInfo[j];
+                //alert(xmlLessonInfo[j]);
+                this.exercises[this.exercisesIndex++] = new Pairs(xmlPairs, this);
+                //alert(this.exercises[this.exercisesIndex-1]);
+            }else if(xmlLessonInfo[j].nodeName == "BLOCKS"){
+                var xmlBlocks = xmlLessonInfo[j];
+                //alert(xmlLessonInfo[j]);
+                this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
+                //alert(this.exercises[this.exercisesIndex-1]);
+            }
+        }
     }
 
     // devolve o prox exercicio ( screen)
     nextExercise() {
-        var nextScreen = exercises.shift();
-        return nextScreen.pageRendering();
+        return this.exercises[this.currentExercise++].pageRendering();
     }
 }
 
@@ -247,9 +272,10 @@ class Screen {
 }
 
 class HomePage extends Screen {
-    constructor(xmlLessons) {
+    constructor(numLessons, parent) {
         super();
-        this.xmlLessons = xmlLessons;
+        this.numLessons = numLessons;
+        this.parent = parent;
     }
 
     pageRendering() {
@@ -258,22 +284,18 @@ class HomePage extends Screen {
         hr(this.body);
 
         var auxNodes;
-        for (var i = 0; i < this.xmlLessons.length ;i++) {
+        var buttons = [];
+        for (var i = 0; i < this.numLessons;i++) {
             var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
             h1(d, "Esta lição é a Número "+(i+1)+":");
-            auxNodes = this.xmlLessons[i].childNodes;
-            var nodesKPB = [];
-            var nIndex = 0;
-            for(var w = 0; w < auxNodes.length; w++)
-                if(auxNodes[w].nodeName != "#text"){
-                    nodesKPB[nIndex] = auxNodes[w];
-                    nIndex++;
-                }
-            h1(d,nodesKPB.length+"\n");
+            
             // first line
             var p2 = p(d, "padding-left:20px;");
-            var b1 = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
-            eventHandler2(b1, "onclick", function () { var lesson = new Lesson(nodesKPB);});
+            buttons[i] = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
+            //eventHandler(b1, "onclick", "screen1();");
+            const index = i;
+            const self = this;
+            eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
             hr(this.body);
         }
     }
@@ -281,6 +303,7 @@ class HomePage extends Screen {
 
 class Keyboard extends Screen {
     constructor(xmlKeyInfo, lesson) {
+        super();
         this.xmlKeyInfo = xmlKeyInfo;
         this.lesson = lesson;
         this.keyboardPrompt();
@@ -290,15 +313,15 @@ class Keyboard extends Screen {
     }
 
     keyboardPrompt() {
-        this.prompt = this.xmlKeyInfo.getElementsByTagName("PROMPT")[0].nodeValue;
+        this.prompt = this.xmlKeyInfo.getElementsByTagName("PROMPT")[0].childNodes[0].nodeValue;
     }
 
     keyboardOriginal() {
-        this.original = this.xmlKeyInfo.getElementsByTagName("ORIGINAL")[0].nodeValue;
+        this.original = this.xmlKeyInfo.getElementsByTagName("ORIGINAL")[0].childNodes[0].nodeValue;
     }
 
     keyboardSound() {
-        this.sound = this.xmlKeyInfo.getElementsByTagName("SOUND")[0].nodeValue;
+        this.sound = this.xmlKeyInfo.getElementsByTagName("SOUND")[0].childNodes[0].nodeValue;
     }
 
     keyboardTranslation() {
@@ -326,24 +349,30 @@ class Keyboard extends Screen {
         var b1 = inpuButton(p2, "check", "Check", "lime");
         eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, this.translations);");
         var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
-        // criar botao que "onclick" vai para this.lessons.next()
+        // criar botao que "onclick" vai para o proximo exercicio da licao this.lessons.next()
         eventHandler(b2, "onclick", "this.lessons.next();");
         hr(this.body);
     }
 }
 
 class Pairs extends Screen {
-    constructor(xmlPairs) {
+    constructor(xmlPairs, lesson) {
         super();
         this.xmlPairs = xmlPairs;
+        this.lesson = lesson;
     }
+
+    pageRendering() {}
 }
 
 class Blocks extends Screen {
-    constructor(xmlBlocks) {
+    constructor(xmlBlocks, lesson) {
         super();
         this.xmlBlocks = xmlBlocks;
-    }    
+        this.lesson = lesson;
+    } 
+    
+    pageRendering() {}
 }
 
 function screen1() {
@@ -386,13 +415,10 @@ function runLanguage(text) {
         languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
         var languageToUse;
         if(isLanguageExtraAlphabets()){
-            languageToUse = new LanguageExtraAlphabets(languageName,xmlDoc);
-            alert("It is a language with extra alphabets.");
+            languageToUse = new LanguageExtraAlphabets(xmlDoc);
         }else{     
-            languageToUse = new Language(languageName,xmlDoc);
-            alert("It is a language with latin alphabet.");
+            languageToUse = new Language(xmlDoc);
         }
-        languageToUse.HomepageScreen();
     }
     else {
         alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
