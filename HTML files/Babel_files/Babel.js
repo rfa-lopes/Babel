@@ -189,15 +189,9 @@ class Language {
 
     HomepageScreen() {
         var homePage = new HomePage(this.lessons);
-        return homePage.defineHomePage();
+        return homePage.pageRendering();
     }
-
-    KeyboardScreen() {}
-
-    PairsScreen() {}
-
-    BlocksScreen() {}
-}
+ }
 
 class LanguageExtraAlphabets extends Language {
     constructor(lName,xmlDocument) {
@@ -208,81 +202,113 @@ class LanguageExtraAlphabets extends Language {
 }
 
 class DynamicHTML {
-    constructor() {
-        this.body = document.body;
-    }
+    constructor() {}
 
-    createBlankHTMLPage () {
-        this.body.innerHTML = '';
-        return this.body;
-    }
-
+    // para criar buttons com static functions
 }
 
-class HomePage {
+class Lesson {
+    constructor(xmlLessonInfo) {
+        this.xmlLessonInfo = xmlLessonInfo;
+        this.exercises = [];
+        this.saveExercisesInArray();
+        this.nextExercise();
+        // podemos criar outro array com os exercicios errados , que necessitamos de voltar a repetir ou ir eliminando há medida que acerta
+    }
+
+    saveExercisesInArray() {
+        for(var j = 0; j < this.xmlLessonInfo.lenght; j++)
+            if(this.xmlLessonInfo[j].nodeValue == "KEYBOARD"){
+                var xmlKeyBoard = this.xmlLessonInfo[j].childNodes;
+                exercises.push(new Keyboard(xmlKeyBoard, this));
+            }else if(this.xmlLessonInfo[j].nodeValue == "PAIRS"){
+                var xmlPairs = this.xmlLessonInfo[j].childNodes;
+                exercises.push(new Pairs(xmlPairs, this));
+            }else{
+                var xmlBlocks = this.xmlLessonInfo[j].childNodes;
+                exercises.push(new Blocks(xmlBlocks, this));
+            } 
+    }
+
+    // devolve o prox exercicio ( screen)
+    nextExercise() {
+        var nextScreen = exercises.shift();
+        return nextScreen.pageRendering();
+    }
+}
+
+class Screen {
+    constructor() {}
+
+    pageRendering() {
+        this.body = document.body;
+        this.body.innerHTML = '';
+    }
+}
+
+class HomePage extends Screen {
     constructor(xmlLessons) {
+        super();
         this.xmlLessons = xmlLessons;
     }
 
-    defineHomePage(){
-        var htmlPage = new DynamicHTML();
-        var body = htmlPage.createBlankHTMLPage();
+    pageRendering() {
+        super.pageRendering();
+        h1(this.body, "Escolha qual a lição que pretende realizar:");
+        hr(this.body);
 
-        h1(body, "Escolha qual a lição que pretende realizar:");
-        hr(body);
+        var auxNodes;
         for (var i = 0; i < this.xmlLessons.length ;i++) {
-            var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+            var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
             h1(d, "Esta lição é a Número "+(i+1)+":");
-            var auxNodes = this.xmlLessons[i].childNodes;
-            var nodesKPB = {};
+            auxNodes = this.xmlLessons[i].childNodes;
+            var nodesKPB = [];
             var nIndex = 0;
             for(var w = 0; w < auxNodes.length; w++)
                 if(auxNodes[w].nodeName != "#text"){
                     nodesKPB[nIndex] = auxNodes[w];
                     nIndex++;
                 }
-            h1(d,nIndex+"\n");
+            h1(d,nodesKPB.length+"\n");
             // first line
             var p2 = p(d, "padding-left:20px;");
             var b1 = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
-            eventHandler(b1, "onclick", "screen1();");
-            hr(body);
+            eventHandler2(b1, "onclick", function () { var lesson = new Lesson(nodesKPB);});
+            hr(this.body);
         }
     }
 }
 
-class Screen {
-    constructor(xmlDocument) {
-        this.xmlDocument = xmlDocument;
-    }
-}
-
 class Keyboard extends Screen {
-    constructor(xmlDocument) {
-        super(xmlDocument);
+    constructor(xmlKeyInfo, lesson) {
+        this.xmlKeyInfo = xmlKeyInfo;
+        this.lesson = lesson;
         this.keyboardPrompt();
         this.keyboardOriginal();
         this.keyboardSound();
+        this.keyboardTranslation();
     }
 
     keyboardPrompt() {
-        this.prompt = this.xmlDocument.getElementsByTagName("PROMPT")[0].nodeValue;
+        this.prompt = this.xmlKeyInfo.getElementsByTagName("PROMPT")[0].nodeValue;
     }
 
     keyboardOriginal() {
-        this.original = this.xmlDocument.getElementsByTagName("ORIGINAL")[0].nodeValue;
+        this.original = this.xmlKeyInfo.getElementsByTagName("ORIGINAL")[0].nodeValue;
     }
 
     keyboardSound() {
-        this.sound = this.xmlDocument.getElementsByTagName("SOUND")[0].nodeValue;
+        this.sound = this.xmlKeyInfo.getElementsByTagName("SOUND")[0].nodeValue;
     }
 
-    defineKeyboardPage(){
-        var htmlPage = new DynamicHTML();
-        var body = htmlPage.createBlankHTMLPage();
-        
+    keyboardTranslation() {
+        this.translations = this.xmlKeyInfo.getElementsByTagName("TRANSLATION").nodeValue;
+    }
+
+    pageRendering() {
+        super.pageRendering();
         // a div, only because we want a border
-        var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+        var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
         h1(d, this.prompt);
 
         // first line
@@ -298,10 +324,26 @@ class Keyboard extends Screen {
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
         var b1 = inpuButton(p2, "check", "Check", "lime");
-        eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, 'What time is it?');");
-
-        hr(body);
+        eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, this.translations);");
+        var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
+        // criar botao que "onclick" vai para this.lessons.next()
+        eventHandler(b2, "onclick", "this.lessons.next();");
+        hr(this.body);
     }
+}
+
+class Pairs extends Screen {
+    constructor(xmlPairs) {
+        super();
+        this.xmlPairs = xmlPairs;
+    }
+}
+
+class Blocks extends Screen {
+    constructor(xmlBlocks) {
+        super();
+        this.xmlBlocks = xmlBlocks;
+    }    
 }
 
 function screen1() {

@@ -10,3 +10,8 @@ Como a criacao de paginas dinamica funciona :
 É  necessario criar uma pagina inicial que permite selecionar de entre as várias lições
     disponíveis, a que pretendemos realizar
 
+
+dynamicHtml serve para guardar métodos 
+static como a criação dos botões
+
+alterar validate 
