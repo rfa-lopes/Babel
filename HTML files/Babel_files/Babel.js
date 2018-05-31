@@ -45,45 +45,45 @@ function validate(answer, solution) {
 			play("general/right_answer.mp3");
 		else if (i+1 == solution.length)
 			play("general/wrong_answer.mp3");
-}
-
-/* XML */
-/*       https://www.w3schools.com/xml/default.asp  */
-
-function text2XML(text) {
-	parser = new DOMParser();
-	serializer = new XMLSerializer();
-	xmlDoc = parser.parseFromString(text,"text/xml");
-	return xmlDoc;
-}
-
-function XML2Text(xml) {
-	return xmlSerializer.serializeToString(xml);
-}
-
-/* Local files */
-/*        https://www.javascripture.com/FileReader */
-
-function processLocalFile(e, processor) {
-	var file = e.target.files[0];
-	if (!file) {
-		return;
 	}
-	var reader = new FileReader();
-	reader.onload = function(e) {
-		processor(e.target.result);
-	};
-	reader.readAsText(file, "UTF-8");
-}
+
+	/* XML */
+	/*       https://www.w3schools.com/xml/default.asp  */
+
+	function text2XML(text) {
+		parser = new DOMParser();
+		serializer = new XMLSerializer();
+		xmlDoc = parser.parseFromString(text,"text/xml");
+		return xmlDoc;
+	}
+
+	function XML2Text(xml) {
+		return xmlSerializer.serializeToString(xml);
+	}
+
+	/* Local files */
+	/*        https://www.javascripture.com/FileReader */
+
+	function processLocalFile(e, processor) {
+		var file = e.target.files[0];
+		if (!file) {
+			return;
+		}
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			processor(e.target.result);
+		};
+		reader.readAsText(file, "UTF-8");
+	}
 
 
-/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
-/*        https://www.w3schools.com/js/js_htmldom.asp */
+	/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
+	/*        https://www.w3schools.com/js/js_htmldom.asp */
 
-function eventHandler(a, kind, action) {
-	a[kind] = new Function(action);
-	return a;
-}
+	function eventHandler(a, kind, action) {
+		a[kind] = new Function(action);
+		return a;
+	}
 
 function eventHandler2(a, kind, action) { // funcao recomendada pelo prof no forum
 	a[kind] = action;
@@ -269,11 +269,11 @@ class Lesson {
     nextExercise() {
     	if(this.currentExercise < this.exercisesIndex){
     		this.exercises[this.currentExercise++].pageRendering();
-		}else{ 
-			alert("FIM DA LIÇÃO");
-			const self = this;
-			self.parent.startHomepageScreen();
-		}
+    	}else{ 
+    		alert("FIM DA LIÇÃO");
+    		const self = this;
+    		self.parent.startHomepageScreen();
+    	}
     }
 }
 
@@ -351,14 +351,14 @@ class Keyboard extends Screen {
         var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
         h1(d, this.prompt);
 
-		const self = this;
+        const self = this;
         // first line
         var p1 = p(d, "padding-left:40px; word-spacing:50px;");
         var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
-		if(this.sound != null)
-			eventHandler2(i, "onclick", function() {play(self.sound);});
-		else 
-			alert("It is not possible to listen the sound!");
+        if(this.sound != null)
+        	eventHandler2(i, "onclick", function() {play(self.sound);});
+        else 
+        	alert("It is not possible to listen the sound!");
         text(p1, 16, " ");
         text(p1, 32, this.original);
 
@@ -367,7 +367,7 @@ class Keyboard extends Screen {
         var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
-		var b1 = inpuButton(p2, "check", "Check", "lime");
+        var b1 = inpuButton(p2, "check", "Check", "lime");
         eventHandler2(b1, "onclick", function() {validate(document.getElementById('answer').value, self.translations);});
         var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
         eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
@@ -406,6 +406,7 @@ class Pairs extends Screen {
         var words = this.original.split(" ");
         var solutions = this.solution.split(" ");
         var aux;
+        var auxb;
         var buttons = [];
         for (var i = 0; i < words.length; i++) {
         	var p1 = p(d, "padding-left:20px;");
@@ -414,20 +415,32 @@ class Pairs extends Screen {
         	eventHandler2(buttons[i], "onclick", function () {
         		if (aux == undefined){
         			aux = words[index];
+        			auxb = buttons[index];
+        			buttons[index].style.backgroundColor = "lime";
         		}else{
         			var x = solutions.indexOf(aux);
-        			if(x%2 == 0){
+        			if(x % 2 == 0){
         				if(solutions[x+1] == words[index])
-							alert("ACERTOU!");
-						else 
-							alert("Falhou, tente outra vez !");
+        					acertou();
+        				else 
+        					falhou();
         			}else{
         				if(solutions[x-1] == words[index])
-							alert("ACERTO!");
-						else 
-							alert("Falhou, tente outra vez !");
+        					acertou();
+        				else 
+        					falhou();
         			}
         			aux = undefined;
+        		}
+        		function falhou(){
+        			buttons[index].style.backgroundColor = "white";
+        			auxb.style.backgroundColor = "white";
+        		}
+        		function acertou(){
+        			buttons[index].style.backgroundColor = "lime";
+        			auxb.style.backgroundColor = "lime";
+        			buttons[index].disabled = true;
+        			auxb.disabled = true;
         		}
         	});
         }
