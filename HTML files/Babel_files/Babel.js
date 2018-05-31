@@ -248,8 +248,12 @@ class Lesson {
         // podemos criar outro array com os exercicios errados , que necessitamos de voltar a repetir ou ir eliminando há medida que acerta
     }
 
-    isFirstLesson(){
-    	return this.currentExercise == 1;
+    getExerciseIndex(){
+    	return this.currentExercise;
+    }
+
+    getNumberExercises(){
+    	return this.exercisesIndex;
     }
 
     saveExercisesInArray(xmlLessonInfo) {
@@ -286,12 +290,9 @@ class Lesson {
     }
 
     previousExercise(){
-    	alert(this.currentExercise);
-    	if(this.currentExercise > 1 ){
-    		alert("MOSTRAR EXERCICIO ANTERIOR"); //TODO
-    	}else{ 
-    		alert("Incio da lição");
-    	}
+    	this.currentExercise--;
+    	this.currentExercise--;
+    	this.exercises[this.currentExercise++].pageRendering();
     }
 
     mainMenu(){
@@ -404,7 +405,7 @@ class Keyboard extends Screen {
         });
         var p3 = p(d, "padding-left:270px;");
         
-        if(self.lesson.isFirstLesson()){
+        if(self.lesson.getExerciseIndex()==0){
         	var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
         	eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
         }else{
@@ -414,6 +415,7 @@ class Keyboard extends Screen {
 
         var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
         eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+        h1(d, "Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
         hr(this.body);
     }
 }
@@ -490,7 +492,7 @@ class Pairs extends Screen {
 
         var p3 = p(d, "padding-left:270px;");
         const self = this;
-        if(self.lesson.isFirstLesson()){
+        if(self.lesson.getExerciseIndex()==0){
         	var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
         	eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
         }else{
@@ -500,6 +502,7 @@ class Pairs extends Screen {
 
         var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
         eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+        h1(d,"Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
         hr(this.body);
 
     }
@@ -559,7 +562,7 @@ class Blocks extends Screen {
 
 		var p3 = p(d, "padding-left:270px;");
 		const self = this;
-		if(self.lesson.isFirstLesson()){
+		if(self.lesson.getExerciseIndex()==0){
 			var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
 			eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
 		}else{
@@ -569,6 +572,7 @@ class Blocks extends Screen {
 
 		var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		h1(d,"Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
 		hr(this.body);
 	}
 }
