@@ -33,7 +33,7 @@ function play(sound) {
 }
 
 function validate(answer, solution) {
-	alert(solution);
+	//alert(solution);
 	if( answer == solution )
 		play("general/right_answer.mp3");
 	else
@@ -270,6 +270,7 @@ class Lesson {
 
     // devolve o prox exercicio ( screen)
     nextExercise() {
+    	alert(this.currentExercise+1);
     	return this.exercises[this.currentExercise++].pageRendering();
     }
 }
@@ -361,8 +362,7 @@ class Keyboard extends Screen {
         var b1 = inpuButton(p2, "check", "Check", "lime");
         eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, this.translations);"); //this.translations está certo! Mas está a ser mandado para o validate mal
         var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
-        // criar botao que "onclick" vai para o proximo exercicio da licao this.lessons.next()
-        eventHandler(b2, "onclick", "this.lessons.nextExercise;"); //Não está a ir para onde queremos
+        eventHandler(b2, "onclick", "this.lesson.nextExercise();"); //continua a dar erro
         hr(this.body);
     }
 }
@@ -372,9 +372,34 @@ class Pairs extends Screen {
 		super();
 		this.xmlPairs = xmlPairs;
 		this.lesson = lesson;
+		this.pairsPrompt();
+		this.pairsOriginal();
+		this.pairsSolution();
 	}
 
-	pageRendering() {}
+	pairsPrompt() {
+		this.prompt = this.xmlPairs.getElementsByTagName("PROMPT")[0].childNodes[0].nodeValue;
+	}
+
+	pairsOriginal() {
+		this.original = this.xmlPairs.getElementsByTagName("ORIGINAL")[0].childNodes[0].nodeValue;
+	}
+
+	pairsSolution() {
+		this.solution = this.xmlPairs.getElementsByTagName("SOLUTION")[0].childNodes[0].nodeValue;
+	}
+
+	pageRendering() {
+		super.pageRendering();
+        // a div, only because we want a border
+        var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+        h1(d, this.prompt);
+
+        //FAZER SPLIT DO ORIGINAL PARA UM ARRAY DE WORDS
+        //fazer botoes para cada posição do array word
+        //Fazer split do SOLUTION e ver posição dois a dois do array solution com a word que selecionou
+
+    }
 }
 
 class Blocks extends Screen {
@@ -382,39 +407,63 @@ class Blocks extends Screen {
 		super();
 		this.xmlBlocks = xmlBlocks;
 		this.lesson = lesson;
-	} 
+		this.blocksPrompt();
+		this.blocksOriginal();
+		this.blocksBlocks();
+		this.blocksSolution();
+	}
 
-	pageRendering() {}
+	blocksPrompt() {
+		this.prompt = this.xmlBlocks.getElementsByTagName("PROMPT")[0].childNodes[0].nodeValue;
+	}
+
+	blocksOriginal() {
+		this.original = this.xmlBlocks.getElementsByTagName("ORIGINAL")[0].childNodes[0].nodeValue;
+	}
+
+	blocksBlocks() {
+		this.blocks = this.xmlBlocks.getElementsByTagName("BLOCKS")[0].childNodes[0].nodeValue;
+	}
+
+	blocksSolution() {
+		this.solution = this.xmlBlocks.getElementsByTagName("SOLUTION")[0].childNodes[0].nodeValue;
+	}
+
+	pageRendering() {
+		super.pageRendering();
+		var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+		h1(d, this.prompt);
+	}
 }
 
 function screen1() {
 	var body = document.body;
-// start with a blank page
-body.innerHTML = '';
+	// start with a blank page
+	body.innerHTML = '';
 
-h1(body, "Babel   (" + languageName + ")");
-hr(body);
+	h1(body, "Babel   (" + languageName + ")");
+	hr(body);
 
-// a div, only because we want a border
-var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
-h1(d, "Write this in English");
+	// a div, only because we want a border
+	var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+	h1(d, "Write this in English");
 
-// first line
-var p1 = p(d, "padding-left:40px; word-spacing:50px;");
-var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
-eventHandler(i, "onclick", "play('japanese/sentences/何時ですか.mp3');");
-text(p1, 16, " ");
-text(p1, 32, "何時ですか");
+	// first line
+	var p1 = p(d, "padding-left:40px; word-spacing:50px;");
+	var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
+	eventHandler(i, "onclick", "play('japanese/sentences/何時ですか.mp3');");
+	text(p1, 16, " ");
+	text(p1, 32, "何時ですか");
 
-// second line
-var p2 = p(d, "padding-left:20px;");
-var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
-eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
-text(p2, 16, " ");
-var b1 = inpuButton(p2, "check", "Check", "lime");
-eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, 'What time is it?');");
+	// second line
+	var p2 = p(d, "padding-left:20px;");
+	var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
+	eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
+	text(p2, 16, " ");
+	var b1 = inpuButton(p2, "check", "Check", "lime");
+	eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, 'What time is it?');");
 
-hr(body);
+	hr(body);
 }
 
 function runLanguage(text) {
@@ -441,4 +490,3 @@ function runLanguage(text) {
 function onLoad() {
 	screen0();
 }
-
