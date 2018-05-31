@@ -334,7 +334,9 @@ class Keyboard extends Screen {
 	}
 
 	keyboardSound() {
-		this.sound = this.xmlKeyInfo.getElementsByTagName("SOUND")[0].childNodes[0].nodeValue;
+		if(this.xmlKeyInfo.getElementsByTagName("SOUND").length != 0)
+			this.sound = this.xmlKeyInfo.getElementsByTagName("SOUND")[0].childNodes[0].nodeValue;
+		else this.sound = null;
 	}
 
 	keyboardTranslation() {
