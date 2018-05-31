@@ -329,18 +329,28 @@ class HomePage extends Screen {
 		for (var i = 0; i < this.numLessons;i++) {
 			const index = i;
 			const self = this;
-			var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
 			var concludedExercises = self.parent.getLesson(index).getConcludedExercises();
 			var nrExercises = self.parent.getLesson(index).getNumberExercises();
+			if(concludedExercises == nrExercises){
+				var d = div(this.body, "border:8px solid green; display:table; padding:20px; margin-left:40px");
+			}else if (concludedExercises > 0){
+				var d = div(this.body, "border:8px solid red; display:table; padding:20px; margin-left:40px");
+			}else{
+				var d = div(this.body, "border:8px solid black; display:table; padding:20px; margin-left:40px");
+			}
 			h1(d, "Esta lição é a Número "+(i+1)+":");
 			h1(d, "Concluidas: "+concludedExercises+"/"+nrExercises);				
             // first line
             var p2 = p(d, "padding-left:20px;");
-            buttons[i] = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
+            buttons[i] = inpuButton(p2, "Check", "Escolha esta lição", "lime");
             eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
-            if(concludedExercises == nrExercises)
-            	buttons[index].disabled = true;
             hr(this.body);
+            if(concludedExercises == nrExercises){
+            	buttons[index].disabled = true;
+            	buttons[index].value = "Concluida";
+            }else if (concludedExercises > 0){
+            	buttons[index].value = "Continue";
+            }
         }
     }
 }
