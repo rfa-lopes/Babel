@@ -48,45 +48,45 @@ function validate(answer, solution) {
 			play("general/wrong_answer.mp3");
 			return false;
 		}
-}
-
-/* XML */
-/*       https://www.w3schools.com/xml/default.asp  */
-
-function text2XML(text) {
-	parser = new DOMParser();
-	serializer = new XMLSerializer();
-	xmlDoc = parser.parseFromString(text,"text/xml");
-	return xmlDoc;
-}
-
-function XML2Text(xml) {
-	return xmlSerializer.serializeToString(xml);
-}
-
-/* Local files */
-/*        https://www.javascripture.com/FileReader */
-
-function processLocalFile(e, processor) {
-	var file = e.target.files[0];
-	if (!file) {
-		return;
 	}
-	var reader = new FileReader();
-	reader.onload = function(e) {
-		processor(e.target.result);
-	};
-	reader.readAsText(file, "UTF-8");
-}
+
+	/* XML */
+	/*       https://www.w3schools.com/xml/default.asp  */
+
+	function text2XML(text) {
+		parser = new DOMParser();
+		serializer = new XMLSerializer();
+		xmlDoc = parser.parseFromString(text,"text/xml");
+		return xmlDoc;
+	}
+
+	function XML2Text(xml) {
+		return xmlSerializer.serializeToString(xml);
+	}
+
+	/* Local files */
+	/*        https://www.javascripture.com/FileReader */
+
+	function processLocalFile(e, processor) {
+		var file = e.target.files[0];
+		if (!file) {
+			return;
+		}
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			processor(e.target.result);
+		};
+		reader.readAsText(file, "UTF-8");
+	}
 
 
-/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
-/*        https://www.w3schools.com/js/js_htmldom.asp */
+	/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
+	/*        https://www.w3schools.com/js/js_htmldom.asp */
 
-function eventHandler(a, kind, action) {
-	a[kind] = new Function(action);
-	return a;
-}
+	function eventHandler(a, kind, action) {
+		a[kind] = new Function(action);
+		return a;
+	}
 
 function eventHandler2(a, kind, action) { // funcao recomendada pelo prof no forum
 	a[kind] = action;
@@ -220,6 +220,10 @@ class Language {
 		this.lessons[lessonIndex].nextExercise();
 	}
 
+	getLesson(lessonIndex){
+		return this.lessons[lessonIndex];
+	}
+
 	//criar botao que permite sair da homepage e recomecar tudo de novo !
 }
 
@@ -251,42 +255,50 @@ class Lesson {
 
     getNumberExercises(){ return this.exercisesIndex;}
 
+    ExerciseEnded(lessonIndex){this.exercises[lessonIndex-1] = null;}
+
+    getConcludedExercises(){
+    	var concludedExercises = 0;
+    	for (var i = 0; i < this.exercises.length; i++) {
+    		if(this.exercises[i] == null)
+    			concludedExercises++;
+    	}
+
+    	return concludedExercises;
+    }
+
     saveExercisesInArray(xmlLessonInfo) {
-        //alert(xmlLessonInfo.length);
-        for(var j = 0; j < xmlLessonInfo.length; j++){
-        	if(xmlLessonInfo[j].nodeName == "KEYBOARD"){
-        		var xmlKeyBoard = xmlLessonInfo[j];
-                //alert(xmlLessonInfo[j]);
-                this.exercises[this.exercisesIndex++] = new Keyboard(xmlKeyBoard, this);
-                //alert(this.exercises[this.exercisesIndex-1]);
-            }else if(xmlLessonInfo[j].nodeName == "PAIRS"){
-            	var xmlPairs = xmlLessonInfo[j];
-                //alert(xmlLessonInfo[j]);
-                this.exercises[this.exercisesIndex++] = new Pairs(xmlPairs, this);
-                //alert(this.exercises[this.exercisesIndex-1]);
-            }else if(xmlLessonInfo[j].nodeName == "BLOCKS"){
-            	var xmlBlocks = xmlLessonInfo[j];
-                //alert(xmlLessonInfo[j]);
-                this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
-                //alert(this.exercises[this.exercisesIndex-1]);
-            }
-        }
+    	for(var j = 0; j < xmlLessonInfo.length; j++){
+    		if(xmlLessonInfo[j].nodeName == "KEYBOARD"){
+    			var xmlKeyBoard = xmlLessonInfo[j];
+    			this.exercises[this.exercisesIndex++] = new Keyboard(xmlKeyBoard, this);
+    		}else if(xmlLessonInfo[j].nodeName == "PAIRS"){
+    			var xmlPairs = xmlLessonInfo[j];
+    			this.exercises[this.exercisesIndex++] = new Pairs(xmlPairs, this);
+    		}else if(xmlLessonInfo[j].nodeName == "BLOCKS"){
+    			var xmlBlocks = xmlLessonInfo[j];
+    			this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
+    		}
+    	}
     }
 
     nextExercise() {
+    	while(this.exercises[this.currentExercise] == null && this.currentExercise < this.exercisesIndex){
+    		this.currentExercise++;
+    	}
     	if(this.currentExercise < this.exercisesIndex){
     		this.exercises[this.currentExercise++].pageRendering();
     	}else{ 
     		alert("FIM DA LIÇÃO");
     		this.endLesson();
     	}
-	}
-	
-	endLesson() {
-		this.currentExercise = 0;
-		const self = this;
-		self.parent.startHomepageScreen();
-	}
+    }
+
+    endLesson() {
+    	this.currentExercise = 0;
+    	const self = this;
+    	self.parent.startHomepageScreen();
+    }
 
 }
 
@@ -313,19 +325,21 @@ class HomePage extends Screen {
 		h1(this.body, "Escolha qual a lição que pretende realizar:");
 		hr(this.body);
 
-		var auxNodes;
 		var buttons = [];
 		for (var i = 0; i < this.numLessons;i++) {
+			const index = i;
+			const self = this;
 			var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+			var concludedExercises = self.parent.getLesson(index).getConcludedExercises();
+			var nrExercises = self.parent.getLesson(index).getNumberExercises();
 			h1(d, "Esta lição é a Número "+(i+1)+":");
-
+			h1(d, "Concluidas: "+concludedExercises+"/"+nrExercises);				
             // first line
             var p2 = p(d, "padding-left:20px;");
             buttons[i] = inpuButton(p2, "Check", "Escolha esta liçao", "lime");
-            //eventHandler(b1, "onclick", "screen1();");
-            const index = i;
-            const self = this;
             eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
+            if(concludedExercises == nrExercises)
+            	buttons[index].disabled = true;
             hr(this.body);
         }
     }
@@ -378,29 +392,31 @@ class Keyboard extends Screen {
         text(p1, 32, this.original);
 
         // second line
+        var concludedExercise;
         var p2 = p(d, "padding-left:20px;");
         var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
-		var b1 = inpuButton(p2, "check", "Check", "lime");
+        var b1 = inpuButton(p2, "check", "Check", "lime");
         eventHandler2(b1, "onclick", function() {
-		var v = validate(document.getElementById('answer').value, self.translations);
-			if(v){
-				i.disabled = true;
-				b1.disabled = true;
-				alert("BOA");
-			}else{
-				i.disabled = true;
-				b1.disabled = true;
-				//guardar exercicio para voltar adicionar no final com this.exercises.push()
-			}
-		});
+        	concludedExercise = validate(document.getElementById('answer').value, self.translations);
+        	if(concludedExercise){
+        		i.disabled = true;
+        		b1.disabled = true;
+        	}else{
+        		i.disabled = true;
+        		b1.disabled = true;
+        	}
+        });
         var t = inputActiveText(p2, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
         var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
-		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-		var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
-		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-        h1(d, "Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
+        eventHandler2(b2, "onclick", function(){
+        	if(concludedExercise)
+        		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
+        	self.lesson.nextExercise();
+        });
+        var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
+        eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         hr(this.body);
     }
 }
@@ -443,48 +459,54 @@ class Pairs extends Screen {
         	buttons[i] = inpuButton(p1, "Check",words[i], "white");
         	const index = i;
         	eventHandler2(buttons[i], "onclick", function () {
-			if (aux == undefined){
-				aux = words[index];
-				auxb = buttons[index];
-				buttons[index].style.backgroundColor = "lime";
-			}else{
-				var x = solutions.indexOf(aux);
-				if(x % 2 == 0){
-					if(solutions[x+1] == words[index])
-						acertou();
-					else 
-						falhou();
-				}else{
-					if(solutions[x-1] == words[index])
-						acertou();
-					else 
-						falhou();
-				}
-				aux = undefined;
-			}
-			function falhou(){
-				buttons[index].style.backgroundColor = "white";
-				auxb.style.backgroundColor = "white";
-			}
-			function acertou(){
-				buttons[index].style.backgroundColor = "lime";
-				auxb.style.backgroundColor = "lime";
-				buttons[index].disabled = true;
-				auxb.disabled = true;
-			}
-			});
-		}
-
-		const self = this;
-		var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+        		if (aux == undefined){
+        			aux = words[index];
+        			auxb = buttons[index];
+        			buttons[index].style.backgroundColor = "lime";
+        		}else{
+        			var x = solutions.indexOf(aux);
+        			if(x % 2 == 0){
+        				if(solutions[x+1] == words[index])
+        					acertou();
+        				else 
+        					falhou();
+        			}else{
+        				if(solutions[x-1] == words[index])
+        					acertou();
+        				else 
+        					falhou();
+        			}
+        			aux = undefined;
+        		}
+        		function falhou(){
+        			buttons[index].style.backgroundColor = "white";
+        			auxb.style.backgroundColor = "white";
+        		}
+        		function acertou(){
+        			buttons[index].style.backgroundColor = "lime";
+        			auxb.style.backgroundColor = "lime";
+        			buttons[index].disabled = true;
+        			auxb.disabled = true;
+        		}
+        	});
+        }
+        const self = this;
+        var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
         var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
-		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-		var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
-		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-        h1(d,"Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
+        eventHandler2(b2, "onclick", function(){
+        	var concludedExercise = true;
+        	for (var i = 0; i < buttons.length; i++) {
+        		if(buttons[i].disabled == false)
+        			concludedExercise = false;
+        	}
+        	if(concludedExercise)
+        		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
+        	self.lesson.nextExercise();
+        });
+        var b3 = inpuButton(p1, "check", "Give up of lesson ->", "lime");
+        eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         hr(this.body);
-
-	}
+    }
 }
 
 class Blocks extends Screen {
@@ -543,9 +565,8 @@ class Blocks extends Screen {
 		var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
 		var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-		var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
+		var b3 = inpuButton(p1, "check", "Give up of lesson ->", "lime");
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-		h1(d,"Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
 		hr(this.body);
 	}
 }
@@ -591,7 +612,7 @@ function runLanguage(text) {
         var languageToUse;
         if(isLanguageExtraAlphabets())
         	languageToUse = new LanguageExtraAlphabets(xmlDoc);
-		else   
+        else   
         	languageToUse = new Language(xmlDoc);
     }
     else {
