@@ -218,9 +218,8 @@ class Language {
 	}
 
 	startLesson(lessonIndex) {
-        //alert(lessonIndex);
-        return this.lessons[lessonIndex].nextExercise();
-    }
+		this.lessons[lessonIndex].nextExercise();
+	}
 }
 
 class LanguageExtraAlphabets extends Language {
@@ -270,8 +269,9 @@ class Lesson {
 
     // devolve o prox exercicio ( screen)
     nextExercise() {
-    	alert(this.currentExercise+1);
-    	return this.exercises[this.currentExercise++].pageRendering();
+    	if(this.currentExercise < this.exercisesIndex)
+    		this.exercises[this.currentExercise++].pageRendering();
+    	else alert("FIM DA LIÇÃO");
     }
 }
 
@@ -364,7 +364,8 @@ class Keyboard extends Screen {
         var b1 = inpuButton(p2, "check", "Check", "lime");
         eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, this.translations);"); //this.translations está certo! Mas está a ser mandado para o validate mal
         var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
-        eventHandler(b2, "onclick", "this.lesson.nextExercise();"); //continua a dar erro
+        const self = this;
+        eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
         hr(this.body);
     }
 }
