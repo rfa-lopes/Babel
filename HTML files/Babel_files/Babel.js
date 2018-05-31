@@ -271,6 +271,7 @@ class Lesson {
     		this.exercises[this.currentExercise++].pageRendering();
     	}else{ 
     		alert("FIM DA LIÇÃO");
+    		this.currentExercise = 0;
     		const self = this;
     		self.parent.startHomepageScreen();
     	}
@@ -408,8 +409,8 @@ class Pairs extends Screen {
         var aux;
         var auxb;
         var buttons = [];
+        var p1 = p(d, "padding-left:20px;");
         for (var i = 0; i < words.length; i++) {
-        	var p1 = p(d, "padding-left:20px;");
         	buttons[i] = inpuButton(p1, "Check",words[i], "white");
         	const index = i;
         	eventHandler2(buttons[i], "onclick", function () {
@@ -445,9 +446,11 @@ class Pairs extends Screen {
         	});
         }
 
-        //FAZER SPLIT DO ORIGINAL PARA UM ARRAY DE WORDS
-        //fazer botoes para cada posição do array word
-        //Fazer split do SOLUTION e ver posição dois a dois do array solution com a word que selecionou
+        var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
+        const self = this;
+        eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+        hr(this.body);
+
     }
 }
 
@@ -482,6 +485,17 @@ class Blocks extends Screen {
 		super.pageRendering();
 		var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
 		h1(d, this.prompt);
+		var p1 = p(d, "padding-left:20px;");
+
+
+
+
+
+
+		var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
+		const self = this;
+		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		hr(this.body);
 	}
 }
 /*
