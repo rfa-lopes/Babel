@@ -41,10 +41,14 @@ function validate(answer, solution) {
 */ 
 function validate(answer, solution) {
 	for (var i = 0; i < solution.length; i++) 
-		if( answer == solution[i].childNodes[0].nodeValue )
+		if( answer == solution[i].childNodes[0].nodeValue ){
 			play("general/right_answer.mp3");
-		else if (i+1 == solution.length)
+			return true;
+		}
+		else if (i+1 == solution.length){
 			play("general/wrong_answer.mp3");
+			return false;
+		}
 	}
 
 	/* XML */
@@ -244,6 +248,10 @@ class Lesson {
         // podemos criar outro array com os exercicios errados , que necessitamos de voltar a repetir ou ir eliminando há medida que acerta
     }
 
+    isFirstLesson(){
+    	return this.currentExercise == 1;
+    }
+
     saveExercisesInArray(xmlLessonInfo) {
         //alert(xmlLessonInfo.length);
         for(var j = 0; j < xmlLessonInfo.length; j++){
@@ -276,10 +284,27 @@ class Lesson {
     		self.parent.startHomepageScreen();
     	}
     }
+
+    previousExercise(){
+    	alert(this.currentExercise);
+    	if(this.currentExercise > 1 ){
+    		alert("MOSTRAR EXERCICIO ANTERIOR"); //TODO
+    	}else{ 
+    		alert("Incio da lição");
+    	}
+    }
+
+    mainMenu(){
+    	this.currentExercise = 0;
+    	const self = this;
+    	self.parent.startHomepageScreen();
+    }
 }
 
 class Screen {
-	constructor() {}
+	constructor() {
+		this.concluido = false;
+	}
 
 	pageRendering() {
 		this.body = document.body;
@@ -369,8 +394,25 @@ class Keyboard extends Screen {
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
         var b1 = inpuButton(p2, "check", "Check", "lime");
-        eventHandler2(b1, "onclick", function() {validate(document.getElementById('answer').value, self.translations);});
-        var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
+        eventHandler2(b1, "onclick", function() {
+        	var v = validate(document.getElementById('answer').value, self.translations);
+        	if(v){
+        		i.disabled = true;
+        		b1.disabled = true;
+        		alert("BOA");
+        	}
+        });
+        var p3 = p(d, "padding-left:270px;");
+        
+        if(self.lesson.isFirstLesson()){
+        	var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
+        	eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
+        }else{
+        	var b3 = inpuButton(p3, "check", "<- Previous exercise", "lime");
+        	eventHandler2(b3, "onclick", function(){self.lesson.previousExercise();});
+        }
+
+        var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
         eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
         hr(this.body);
     }
@@ -446,8 +488,17 @@ class Pairs extends Screen {
         	});
         }
 
-        var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
+        var p3 = p(d, "padding-left:270px;");
         const self = this;
+        if(self.lesson.isFirstLesson()){
+        	var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
+        	eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
+        }else{
+        	var b3 = inpuButton(p3, "check", "<- Previous exercise", "lime");
+        	eventHandler2(b3, "onclick", function(){self.lesson.previousExercise();});
+        }
+
+        var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
         eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
         hr(this.body);
 
@@ -474,7 +525,7 @@ class Blocks extends Screen {
 	}
 
 	blocksBlocks() {
-		this.blocks = this.xmlBlocks.getElementsByTagName("BLOCKS")[0].childNodes[0].nodeValue;
+		this.block = this.xmlBlocks.getElementsByTagName("BLOCKS")[0].childNodes[0].nodeValue;
 	}
 
 	blocksSolution() {
@@ -485,15 +536,38 @@ class Blocks extends Screen {
 		super.pageRendering();
 		var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
 		h1(d, this.prompt);
-		var p1 = p(d, "padding-left:20px;");
+		
+		var p1 = p(d, "padding-left:00px;");
 
+		var blocks = this.block.split(" ");
+		var solutions = this.solution.split(" ");
 
+		h1(p1,this.original);
 
+		hr(p1); //é mesmo para criar aquelas linhas?
+		hr(p1);
 
+		var buttons = [];
+		var divisoes = [];
+		for (var i = 0; i < blocks.length; i++) {
+			buttons[i] = inpuButton(p1, "Check",blocks[i], "white");
+			divisoes[i] = div(p1,"padding-left:500px;");
+			const index = i;
+			eventHandler2(buttons[i], "onclick", function () {alert("BBBBBB")});
+			eventHandler2(divisoes[i], "ondrop", function () {alert("AAAAAAAAAAAA!")}); //NÃO CONSIGO FAZER O ONDROP
+		} //ver on drop aqui:   https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop2
 
-
-		var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
+		var p3 = p(d, "padding-left:270px;");
 		const self = this;
+		if(self.lesson.isFirstLesson()){
+			var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
+			eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
+		}else{
+			var b3 = inpuButton(p3, "check", "<- Previous exercise", "lime");
+			eventHandler2(b3, "onclick", function(){self.lesson.previousExercise();});
+		}
+
+		var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
 		hr(this.body);
 	}
