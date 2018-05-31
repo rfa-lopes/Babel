@@ -31,25 +31,21 @@ function play(sound) {
 	else
 		alert("SOUND: " + sound);
 }
-
+/*
 function validate(answer, solution) {
-	//alert(solution);
 	if( answer == solution )
 		play("general/right_answer.mp3");
 	else
 		play("general/wrong_answer.mp3");
 }
-/*
-function validate(answer, solution) { //o solution não esta a chegar definido aqui
-	for (var i = 0; i < solution.length; i++) {
-		if( answer == solution[i].childNodes[0].nodeValue ){
+*/ 
+function validate(answer, solution) {
+	for (var i = 0; i < solution.length; i++) 
+		if( answer == solution[i].childNodes[0].nodeValue )
 			play("general/right_answer.mp3");
-			return; //????????? para sair do metodo
-		}
-	}
-	play("general/wrong_answer.mp3");
+		else if (i+1 == solution.length)
+			play("general/wrong_answer.mp3");
 }
-*/
 
 /* XML */
 /*       https://www.w3schools.com/xml/default.asp  */
@@ -176,12 +172,12 @@ function div(target, style) {
 
 function screen0() {
 	var body = document.body;
-// start with a blank page
-body.innerHTML = '';
+	// start with a blank page
+	body.innerHTML = '';
 
-// load the language XML
-var f = inpuFile(body, "file-input");
-eventHandler(f, "onchange", "processLocalFile(event, runLanguage);");
+	// load the language XML
+	var f = inpuFile(body, "file-input");
+	eventHandler(f, "onchange", "processLocalFile(event, runLanguage);");
 }
 
 function isLanguageExtraAlphabets(){
@@ -209,7 +205,7 @@ class Language {
 	saveLessons(xmlDocument) {
 		var xmlLessons = xmlDocument.getElementsByTagName("LESSON");
 		for(var i = 0; i < xmlLessons.length; i++){
-			this.lessons[i] = new Lesson(xmlLessons[i].childNodes);
+			this.lessons[i] = new Lesson(xmlLessons[i].childNodes, this);
 		}
 	}
 
@@ -220,6 +216,8 @@ class Language {
 	startLesson(lessonIndex) {
 		this.lessons[lessonIndex].nextExercise();
 	}
+
+	//criar botao que permite sair da homepage e recomecar tudo de novo !
 }
 
 class LanguageExtraAlphabets extends Language {
@@ -237,7 +235,8 @@ class DynamicHTML {
 }
 */
 class Lesson {
-	constructor(xmlLessonInfo) {
+	constructor(xmlLessonInfo, parent) {
+		this.parent = parent;
 		this.exercises = [];
 		this.exercisesIndex = 0;
 		this.currentExercise = 0;
@@ -267,11 +266,14 @@ class Lesson {
         }
     }
 
-    // devolve o prox exercicio ( screen)
     nextExercise() {
-    	if(this.currentExercise < this.exercisesIndex)
+    	if(this.currentExercise < this.exercisesIndex){
     		this.exercises[this.currentExercise++].pageRendering();
-    	else alert("FIM DA LIÇÃO");
+		}else{ 
+			alert("FIM DA LIÇÃO");
+			const self = this;
+			self.parent.startHomepageScreen();
+		}
     }
 }
 
@@ -349,10 +351,14 @@ class Keyboard extends Screen {
         var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
         h1(d, this.prompt);
 
+		const self = this;
         // first line
         var p1 = p(d, "padding-left:40px; word-spacing:50px;");
         var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
-        eventHandler(i, "onclick", "play(this.sound);");
+		if(this.sound != null)
+			eventHandler2(i, "onclick", function() {play(self.sound);});
+		else 
+			alert("It is not possible to listen the sound!");
         text(p1, 16, " ");
         text(p1, 32, this.original);
 
@@ -361,10 +367,9 @@ class Keyboard extends Screen {
         var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
-        var b1 = inpuButton(p2, "check", "Check", "lime");
-        eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, this.translations);"); //this.translations está certo! Mas está a ser mandado para o validate mal
+		var b1 = inpuButton(p2, "check", "Check", "lime");
+        eventHandler2(b1, "onclick", function() {validate(document.getElementById('answer').value, self.translations);});
         var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
-        const self = this;
         eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
         hr(this.body);
     }
@@ -398,10 +403,38 @@ class Pairs extends Screen {
         var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
         h1(d, this.prompt);
 
+        var words = this.original.split(" ");
+        var solutions = this.solution.split(" ");
+        var aux;
+        var buttons = [];
+        for (var i = 0; i < words.length; i++) {
+        	var p1 = p(d, "padding-left:20px;");
+        	buttons[i] = inpuButton(p1, "Check",words[i], "white");
+        	const index = i;
+        	eventHandler2(buttons[i], "onclick", function () {
+        		if (aux == undefined){
+        			aux = words[index];
+        		}else{
+        			var x = solutions.indexOf(aux);
+        			if(x%2 == 0){
+        				if(solutions[x+1] == words[index])
+							alert("ACERTOU!");
+						else 
+							alert("Falhou, tente outra vez !");
+        			}else{
+        				if(solutions[x-1] == words[index])
+							alert("ACERTO!");
+						else 
+							alert("Falhou, tente outra vez !");
+        			}
+        			aux = undefined;
+        		}
+        	});
+        }
+
         //FAZER SPLIT DO ORIGINAL PARA UM ARRAY DE WORDS
         //fazer botoes para cada posição do array word
         //Fazer split do SOLUTION e ver posição dois a dois do array solution com a word que selecionou
-
     }
 }
 
@@ -438,7 +471,7 @@ class Blocks extends Screen {
 		h1(d, this.prompt);
 	}
 }
-
+/*
 function screen1() {
 	var body = document.body;
 	// start with a blank page
@@ -468,7 +501,7 @@ function screen1() {
 
 	hr(body);
 }
-
+*/
 function runLanguage(text) {
 	var table="<tr><th>Title</th><th>Artist</th></tr>";
     xmlDoc = text2XML(text);  // assignement to global
