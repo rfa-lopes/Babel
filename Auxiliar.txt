@@ -16,7 +16,8 @@ Como a criacao de paginas dinamica funciona :
 dynamicHtml serve para guardar métodos  static como a criação dos botões
 
 A fazer :
-- ver erro com .xml portugues
-- ver botão ( next ), colocar para alterar para proximo exercicio
--alterar validate 
+Acerca de uma licao:
+- colocar dentro da página do exercicio da licao informacao sobre a posicao dentro da linha temporal da licao; (feito, mas perguntar como fazer melhor)
+- mostrar a solucao do exercicio caso o utilizador o falhe e guarda-lo para o apresentar de novo no final, para o utilizador verificar se já aprendeu !
+
 

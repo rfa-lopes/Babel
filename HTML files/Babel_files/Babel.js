@@ -44,50 +44,49 @@ function validate(answer, solution) {
 		if( answer == solution[i].childNodes[0].nodeValue ){
 			play("general/right_answer.mp3");
 			return true;
-		}
-		else if (i+1 == solution.length){
+		}else if (i+1 == solution.length){
 			play("general/wrong_answer.mp3");
 			return false;
 		}
+}
+
+/* XML */
+/*       https://www.w3schools.com/xml/default.asp  */
+
+function text2XML(text) {
+	parser = new DOMParser();
+	serializer = new XMLSerializer();
+	xmlDoc = parser.parseFromString(text,"text/xml");
+	return xmlDoc;
+}
+
+function XML2Text(xml) {
+	return xmlSerializer.serializeToString(xml);
+}
+
+/* Local files */
+/*        https://www.javascripture.com/FileReader */
+
+function processLocalFile(e, processor) {
+	var file = e.target.files[0];
+	if (!file) {
+		return;
 	}
-
-	/* XML */
-	/*       https://www.w3schools.com/xml/default.asp  */
-
-	function text2XML(text) {
-		parser = new DOMParser();
-		serializer = new XMLSerializer();
-		xmlDoc = parser.parseFromString(text,"text/xml");
-		return xmlDoc;
-	}
-
-	function XML2Text(xml) {
-		return xmlSerializer.serializeToString(xml);
-	}
-
-	/* Local files */
-	/*        https://www.javascripture.com/FileReader */
-
-	function processLocalFile(e, processor) {
-		var file = e.target.files[0];
-		if (!file) {
-			return;
-		}
-		var reader = new FileReader();
-		reader.onload = function(e) {
-			processor(e.target.result);
-		};
-		reader.readAsText(file, "UTF-8");
-	}
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		processor(e.target.result);
+	};
+	reader.readAsText(file, "UTF-8");
+}
 
 
-	/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
-	/*        https://www.w3schools.com/js/js_htmldom.asp */
+/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
+/*        https://www.w3schools.com/js/js_htmldom.asp */
 
-	function eventHandler(a, kind, action) {
-		a[kind] = new Function(action);
-		return a;
-	}
+function eventHandler(a, kind, action) {
+	a[kind] = new Function(action);
+	return a;
+}
 
 function eventHandler2(a, kind, action) { // funcao recomendada pelo prof no forum
 	a[kind] = action;
@@ -248,13 +247,9 @@ class Lesson {
         // podemos criar outro array com os exercicios errados , que necessitamos de voltar a repetir ou ir eliminando há medida que acerta
     }
 
-    getExerciseIndex(){
-    	return this.currentExercise;
-    }
+    getExerciseIndex(){ return this.currentExercise;}
 
-    getNumberExercises(){
-    	return this.exercisesIndex;
-    }
+    getNumberExercises(){ return this.exercisesIndex;}
 
     saveExercisesInArray(xmlLessonInfo) {
         //alert(xmlLessonInfo.length);
@@ -283,23 +278,16 @@ class Lesson {
     		this.exercises[this.currentExercise++].pageRendering();
     	}else{ 
     		alert("FIM DA LIÇÃO");
-    		this.currentExercise = 0;
-    		const self = this;
-    		self.parent.startHomepageScreen();
+    		this.endLesson();
     	}
-    }
+	}
+	
+	endLesson() {
+		this.currentExercise = 0;
+		const self = this;
+		self.parent.startHomepageScreen();
+	}
 
-    previousExercise(){
-    	this.currentExercise--;
-    	this.currentExercise--;
-    	this.exercises[this.currentExercise++].pageRendering();
-    }
-
-    mainMenu(){
-    	this.currentExercise = 0;
-    	const self = this;
-    	self.parent.startHomepageScreen();
-    }
 }
 
 class Screen {
@@ -394,27 +382,24 @@ class Keyboard extends Screen {
         var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
-        var b1 = inpuButton(p2, "check", "Check", "lime");
+		var b1 = inpuButton(p2, "check", "Check", "lime");
         eventHandler2(b1, "onclick", function() {
-        	var v = validate(document.getElementById('answer').value, self.translations);
-        	if(v){
-        		i.disabled = true;
-        		b1.disabled = true;
-        		alert("BOA");
-        	}
-        });
-        var p3 = p(d, "padding-left:270px;");
-        
-        if(self.lesson.getExerciseIndex()==0){
-        	var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
-        	eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
-        }else{
-        	var b3 = inpuButton(p3, "check", "<- Previous exercise", "lime");
-        	eventHandler2(b3, "onclick", function(){self.lesson.previousExercise();});
-        }
-
-        var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
-        eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		var v = validate(document.getElementById('answer').value, self.translations);
+			if(v){
+				i.disabled = true;
+				b1.disabled = true;
+				alert("BOA");
+			}else{
+				i.disabled = true;
+				b1.disabled = true;
+				//guardar exercicio para voltar adicionar no final com this.exercises.push()
+			}
+		});
+        var t = inputActiveText(p2, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+        var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
+		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
+		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         h1(d, "Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
         hr(this.body);
     }
@@ -458,54 +443,48 @@ class Pairs extends Screen {
         	buttons[i] = inpuButton(p1, "Check",words[i], "white");
         	const index = i;
         	eventHandler2(buttons[i], "onclick", function () {
-        		if (aux == undefined){
-        			aux = words[index];
-        			auxb = buttons[index];
-        			buttons[index].style.backgroundColor = "lime";
-        		}else{
-        			var x = solutions.indexOf(aux);
-        			if(x % 2 == 0){
-        				if(solutions[x+1] == words[index])
-        					acertou();
-        				else 
-        					falhou();
-        			}else{
-        				if(solutions[x-1] == words[index])
-        					acertou();
-        				else 
-        					falhou();
-        			}
-        			aux = undefined;
-        		}
-        		function falhou(){
-        			buttons[index].style.backgroundColor = "white";
-        			auxb.style.backgroundColor = "white";
-        		}
-        		function acertou(){
-        			buttons[index].style.backgroundColor = "lime";
-        			auxb.style.backgroundColor = "lime";
-        			buttons[index].disabled = true;
-        			auxb.disabled = true;
-        		}
-        	});
-        }
+			if (aux == undefined){
+				aux = words[index];
+				auxb = buttons[index];
+				buttons[index].style.backgroundColor = "lime";
+			}else{
+				var x = solutions.indexOf(aux);
+				if(x % 2 == 0){
+					if(solutions[x+1] == words[index])
+						acertou();
+					else 
+						falhou();
+				}else{
+					if(solutions[x-1] == words[index])
+						acertou();
+					else 
+						falhou();
+				}
+				aux = undefined;
+			}
+			function falhou(){
+				buttons[index].style.backgroundColor = "white";
+				auxb.style.backgroundColor = "white";
+			}
+			function acertou(){
+				buttons[index].style.backgroundColor = "lime";
+				auxb.style.backgroundColor = "lime";
+				buttons[index].disabled = true;
+				auxb.disabled = true;
+			}
+			});
+		}
 
-        var p3 = p(d, "padding-left:270px;");
-        const self = this;
-        if(self.lesson.getExerciseIndex()==0){
-        	var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
-        	eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
-        }else{
-        	var b3 = inpuButton(p3, "check", "<- Previous exercise", "lime");
-        	eventHandler2(b3, "onclick", function(){self.lesson.previousExercise();});
-        }
-
-        var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
-        eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		const self = this;
+		var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+        var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
+		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
+		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         h1(d,"Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
         hr(this.body);
 
-    }
+	}
 }
 
 class Blocks extends Screen {
@@ -558,20 +537,14 @@ class Blocks extends Screen {
 			const index = i;
 			eventHandler2(buttons[i], "onclick", function () {alert("BBBBBB")});
 			eventHandler2(divisoes[i], "ondrop", function () {alert("AAAAAAAAAAAA!")}); //NÃO CONSIGO FAZER O ONDROP
-		} //ver on drop aqui:   https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_draganddrop2
+		} 
 
-		var p3 = p(d, "padding-left:270px;");
 		const self = this;
-		if(self.lesson.getExerciseIndex()==0){
-			var b3 = inpuButton(p3, "check", "Go to Main Menu", "lime");
-			eventHandler2(b3, "onclick", function(){self.lesson.mainMenu();});
-		}else{
-			var b3 = inpuButton(p3, "check", "<- Previous exercise", "lime");
-			eventHandler2(b3, "onclick", function(){self.lesson.previousExercise();});
-		}
-
-		var b2 = inpuButton(p3, "check", "Next exercise ->", "lime");
+		var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+		var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
+		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
 		h1(d,"Exercicio: "+self.lesson.getExerciseIndex()+"/"+self.lesson.getNumberExercises());
 		hr(this.body);
 	}
@@ -616,11 +589,10 @@ function runLanguage(text) {
         if( nodes.length == 1 ) {
         languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
         var languageToUse;
-        if(isLanguageExtraAlphabets()){
+        if(isLanguageExtraAlphabets())
         	languageToUse = new LanguageExtraAlphabets(xmlDoc);
-        }else{     
+		else   
         	languageToUse = new Language(xmlDoc);
-        }
     }
     else {
     	alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
