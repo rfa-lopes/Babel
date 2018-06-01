@@ -3,12 +3,12 @@ Como a criacao de paginas dinamica funciona :
 2- corre-se a funcao onLoad
 3- chama o screen que vai abrir o ficheiro definido no inicio
 4- chama o processLocalFile que recebe o evento e se não existirem nenhum evento começa
-    imediatamente a tratar este evento
+imediatamente a tratar este evento
 5- chama o runLanguage que vai finalmente abrir o ficheiro .xml e começar a leitura
 6- chama o screen1 que produz um ecrã que apenas funciona para uma string de texto estática
 
 É  necessario criar uma pagina inicial que permite selecionar de entre as várias lições
-    disponíveis, a que pretendemos realizar
+disponíveis, a que pretendemos realizar
 
 
 --------------------------------------------------------------------------------
@@ -17,7 +17,8 @@ dynamicHtml serve para guardar métodos  static como a criação dos botões
 
 A fazer :
 Acerca de uma licao:
-- colocar dentro da página do exercicio da licao informacao sobre a posicao dentro da linha temporal da licao; (feito, mas perguntar como fazer melhor)
-- mostrar a solucao do exercicio caso o utilizador o falhe e guarda-lo para o apresentar de novo no final, para o utilizador verificar se já aprendeu !
+- mostrar a solucao do exercicio caso o utilizador o falhe e guarda-lo para o apresentar de novo no final, para o utilizador verificar se já aprendeu ! (falta pairs e keyboard)
 
+-melhorar o blockes
 
+- fazer o symbols

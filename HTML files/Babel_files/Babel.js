@@ -277,7 +277,7 @@ class Lesson {
 
     getExerciseIndex(){ return this.currentExercise;}
 
-    getNumberExercises(){ return this.exercisesIndex;}
+    getNumberExercises(){ return this.exercisesIndex-1;}
 
     ExerciseEnded(lessonIndex){this.exercises[lessonIndex-1] = null;}
 
@@ -303,7 +303,7 @@ class Lesson {
     			this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
     		}
     	}
-    	this.exercises[this.exercisesIndex] = new endLessonScreen(this);
+    	this.exercises[this.exercisesIndex++] = new endLessonScreen(this);
     }
 
     nextExercise() {
@@ -353,11 +353,11 @@ class HomePage extends Screen {
 			var concludedExercises = self.parent.getLesson(index).getConcludedExercises();
 			var nrExercises = self.parent.getLesson(index).getNumberExercises();
 			if(concludedExercises == nrExercises){
-				var d = div(this.body, "border:8px solid green; display:table; padding:20px; margin-left:40px; margin-bottom:2em;");
+				var d = div(this.body, "border:8px solid green; display:table; padding:20px; margin-left:40px; margin-bottom:2em;display: inline-block;");
 			}else if (concludedExercises > 0){
-				var d = div(this.body, "border:8px solid red; display:table; padding:20px; margin-left:40px;margin-bottom:2em;");
+				var d = div(this.body, "border:8px solid red; display:table; padding:20px; margin-left:40px;margin-bottom:2em;display: inline-block;");
 			}else{
-				var d = div(this.body, "border:2px solid black; display:table; padding:20px; margin-left:40px;margin-bottom:2em;");
+				var d = div(this.body, "border:2px solid black; display:table; padding:20px; margin-left:40px;margin-bottom:2em;display: inline-block;");
 			}
 			h1(d, "Esta lição é a Número "+(i+1)+":");
 			h1(d, "Concluidas: "+concludedExercises+"/"+nrExercises);				
@@ -394,8 +394,6 @@ class endLessonScreen extends Screen {
 		var b = inpuButton3(p1, "check", "Página Inicial", "white");
 		var self = this;
 		eventHandler2(b, "onclick", function(){self.lesson.nextExercise();});
-
-
 	}
 }
 
@@ -466,7 +464,7 @@ class Keyboard extends Screen {
         });
         var b2 = inpuButton3(p3, "check", "Next exercise ->", "white");
         var b3 = inpuButton3(p3, "check", "Give up of lesson", "white");
-        var t = inputActiveText(p5, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+        var t = text(p3, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
         eventHandler2(b2, "onclick", function(){
         	if(concludedExercise)
         		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
@@ -510,10 +508,7 @@ class Pairs extends Screen {
         var auxb;
         var buttons = [];
         var p1 = p(d, "padding-left:20px;");
-        var space1 = p(d, "padding-left:20px;");
-        var space2 = p(d, "padding-left:20px;");
-        h1(space1, "");
-        h1(space2, "");
+        var failsCount = 0;
         for (var i = 0; i < words.length; i++) {
         	buttons[i] = inpuButton2(p1, "Check",words[i], "white");
         	const index = i;
@@ -540,6 +535,13 @@ class Pairs extends Screen {
         		function falhou(){
         			buttons[index].style.backgroundColor = "white";
         			auxb.style.backgroundColor = "white";
+        			failsCount++;
+        			if(failsCount == 3){
+        				for (var i = 0; i < buttons.length; i++) {
+        					buttons[i].disabled = true;
+        					buttons[i].style.backgroundColor = "red";
+        				}
+        			}
         		}
         		function acertou(){
         			buttons[index].style.backgroundColor = "lime";
@@ -554,12 +556,12 @@ class Pairs extends Screen {
         var p3 = p(d, "padding-left:450px;");
         var p4 = p(d, "padding-left:470px;");
         var b3 = inpuButton3(p3, "check", "Give up of lesson", "white");
-        var t = inputActiveText(p4, "status", 5, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+        var t = text(p1, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
         var b2 = inpuButton3(p2, "check", "Next exercise ->", "white");
         eventHandler2(b2, "onclick", function(){
         	var concludedExercise = true;
         	for (var i = 0; i < buttons.length; i++) {
-        		if(buttons[i].disabled == false)
+        		if(buttons[i].style.backgroundColor != "lime")
         			concludedExercise = false;
         	}
         	if(concludedExercise)
@@ -569,6 +571,20 @@ class Pairs extends Screen {
         eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         hr(this.body);
     }
+}
+
+function drag(event1){
+	event1.dataTransfer.setData("text", event1.target.id);
+}
+
+function drop(event1){
+	event1.preventDefault();
+	var data = event1.dataTransfer.getData("text");
+	event1.target.appendChild(document.getElementById(data));
+}
+
+function allowDrop(event1){
+	event1.preventDefault();
 }
 
 class Blocks extends Screen {
@@ -600,36 +616,79 @@ class Blocks extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+		var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px;");
 		h1(d, this.prompt);
-		
-		var p1 = p(d, "padding-left:00px;");
 
 		var blocks = this.block.split(" ");
 		var solutions = this.solution.split(" ");
 
+		var p1 = p(d, "padding-left:10px;");
 		h1(p1,this.original);
 
-		hr(p1); //é mesmo para criar aquelas linhas?
-		hr(p1);
-
 		var buttons = [];
-		var divisoes = [];
-		for (var i = 0; i < blocks.length; i++) {
-			buttons[i] = inpuButton(p1, "Check",blocks[i], "white");
-			divisoes[i] = div(p1,"padding-left:500px;");
-			const index = i;
-			eventHandler2(buttons[i], "onclick", function () {alert("BBBBBB")});
-			eventHandler2(divisoes[i], "ondrop", function () {alert("AAAAAAAAAAAA!")}); //NÃO CONSIGO FAZER O ONDROP
-		} 
+		var divisions = [];
+		var divisions2 = [];
 
+		var p2 = p(d, "padding-left:20px;");
+		for (var i = 0; i < solutions.length; i++) {
+			divisions[i] = div(p2,"border:1px solid black;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
+		}
+		var p3 = p(d, "padding-left:10px;");
+		hr(p3);
+		for (var j = 0; j < blocks.length; j++) {
+			const index = j;
+			divisions2[index] = div(p3,"border:1px solid black;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
+			buttons[index] =  inpuButton2(divisions2[index], index, blocks[index], "indexborder:2px solid black;display:table; padding:10px; margin-left:40px;");
+			buttons[index].draggable = "true";
+			eventHandler2(buttons[index], "ondragstart", function () {drag(event);});
+		}
+
+		for (var i = 0; i < solutions.length; i++) {
+			const index = i;
+			divisions[index].isPossible = true;
+			//TODO complete
+			eventHandler2(divisions[index], "ondragstart", function () {drag(event);divisions[index].isPossible = true;});
+			eventHandler2(divisions[index], "ondragover", function () {if(divisions[index].isPossible) allowDrop(event);});
+			eventHandler2(divisions[index], "ondrop", function () {
+				drop(event);divisions[index].isPossible = false;
+				var indexToUse = event.dataTransfer.getData("text");
+				divisions[index].sol = buttons[indexToUse].value;
+			});
+		}
+
+		var p4 = p(d, "padding-left:10px;");
 		const self = this;
-		var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-		var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
+		var b4 = inpuButton3(p4, "check", "Check", "white");
+		eventHandler2(b4, "onclick", function(){
+			var sucess = true;
+			for (var i = 0; i < solutions.length; i++) {
+				alert(solutions[i]==divisions[i].sol);
+				if(divisions[i].sol == undefined){
+					falhou();
+					break;
+				}else if(solutions[i]!=divisions[i].sol){
+					falhou();
+					break;
+				}
+			}
+			function falhou(){
+				alert("This is the correct answer: "+self.solution);
+				b4.style.backgroundColor = "Crimson";
+				b4.value = "Falhou";
+				sucess = false;
+			}
+			if(sucess){
+				b4.style.backgroundColor = "ForestGreen";
+				b4.value = "Parabéns!!";
+			}
+			b4.disabled = true;
+		});
+
+		var t = text(p4, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+		var b2 = inpuButton3(p4, "check", "Next exercise ->", "white");
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-		var b3 = inpuButton(p1, "check", "Give up of lesson", "lime");
+		var b3 = inpuButton3(p4, "check", "Give up of lesson", "white");
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-		hr(this.body);
 	}
 }
 /*
