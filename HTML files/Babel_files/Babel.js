@@ -158,6 +158,30 @@ function inpuButton(target, id, value, color) {
 	return a;
 }
 
+function inpuButton2(target, id, value, color) {
+	var a = document.createElement("INPUT");
+	a.type = "button";
+	a.id = id;
+	a.value = value;
+	a.style.backgroundColor = color;
+	a.style.margin = "10px";
+	a.style.padding = "15px 15px";
+	target.appendChild(a);
+	return a;
+}
+
+function inpuButton3(target, id, value, color) {
+	var a = document.createElement("INPUT");
+	a.type = "button";
+	a.id = id;
+	a.value = value;
+	a.style.backgroundColor = color;
+	a.style.margin = "10px";
+	a.style.padding = "10px 10px";
+	target.appendChild(a);
+	return a;
+}
+
 function inpuFile(target, id, ) {
 	var a = document.createElement("INPUT");
 	a.type = "file";
@@ -263,7 +287,6 @@ class Lesson {
     		if(this.exercises[i] == null)
     			concludedExercises++;
     	}
-
     	return concludedExercises;
     }
 
@@ -280,6 +303,7 @@ class Lesson {
     			this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
     		}
     	}
+    	this.exercises[this.exercisesIndex] = new endLessonScreen(this);
     }
 
     nextExercise() {
@@ -289,7 +313,6 @@ class Lesson {
     	if(this.currentExercise < this.exercisesIndex){
     		this.exercises[this.currentExercise++].pageRendering();
     	}else{ 
-    		alert("FIM DA LIÇÃO");
     		this.endLesson();
     	}
     }
@@ -323,8 +346,6 @@ class HomePage extends Screen {
 	pageRendering() {
 		super.pageRendering();
 		h1(this.body, "Escolha qual a lição que pretende realizar:");
-		hr(this.body);
-
 		var buttons = [];
 		for (var i = 0; i < this.numLessons;i++) {
 			const index = i;
@@ -332,19 +353,18 @@ class HomePage extends Screen {
 			var concludedExercises = self.parent.getLesson(index).getConcludedExercises();
 			var nrExercises = self.parent.getLesson(index).getNumberExercises();
 			if(concludedExercises == nrExercises){
-				var d = div(this.body, "border:8px solid green; display:table; padding:20px; margin-left:40px");
+				var d = div(this.body, "border:8px solid green; display:table; padding:20px; margin-left:40px; margin-bottom:2em;");
 			}else if (concludedExercises > 0){
-				var d = div(this.body, "border:8px solid red; display:table; padding:20px; margin-left:40px");
+				var d = div(this.body, "border:8px solid red; display:table; padding:20px; margin-left:40px;margin-bottom:2em;");
 			}else{
-				var d = div(this.body, "border:8px solid black; display:table; padding:20px; margin-left:40px");
+				var d = div(this.body, "border:2px solid black; display:table; padding:20px; margin-left:40px;margin-bottom:2em;");
 			}
 			h1(d, "Esta lição é a Número "+(i+1)+":");
 			h1(d, "Concluidas: "+concludedExercises+"/"+nrExercises);				
             // first line
             var p2 = p(d, "padding-left:20px;");
-            buttons[i] = inpuButton(p2, "Check", "Escolha esta lição", "lime");
+            buttons[i] = inpuButton3(p2, "Check", "Escolha esta lição", "white");
             eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
-            hr(this.body);
             if(concludedExercises == nrExercises){
             	buttons[index].disabled = true;
             	buttons[index].value = "Concluida";
@@ -353,6 +373,30 @@ class HomePage extends Screen {
             }
         }
     }
+}
+
+class endLessonScreen extends Screen {
+	constructor(lesson) {
+		super();
+		this.lesson = lesson;
+	}
+	pageRendering() {
+		super.pageRendering();
+		var d;
+		if(this.lesson.getConcludedExercises() == this.lesson.getNumberExercises()){
+			d = div(this.body, "border:3px solid green; display:table; padding:20px; margin-left:40px");
+			h1(d,"Muito bem! Conclui esta lição com sucesso.");
+		}else{
+			d = div(this.body, "border:3px solid red; display:table; padding:20px; margin-left:40px");
+			h1(d,"Ainda não acabou! Volte a repetir esta lição.");
+		}
+		var p1 = p(d, "padding-left:250px;");
+		var b = inpuButton3(p1, "check", "Página Inicial", "white");
+		var self = this;
+		eventHandler2(b, "onclick", function(){self.lesson.nextExercise();});
+
+
+	}
 }
 
 class Keyboard extends Screen {
@@ -387,7 +431,7 @@ class Keyboard extends Screen {
 	pageRendering() {
 		super.pageRendering();
         // a div, only because we want a border
-        var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
+        var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px;");
         h1(d, this.prompt);
 
         const self = this;
@@ -404,10 +448,12 @@ class Keyboard extends Screen {
         // second line
         var concludedExercise;
         var p2 = p(d, "padding-left:20px;");
+        var p3 = p(d, "padding-left:20px;");
+        var p5 = p(d, "padding-left:470px;");
         var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
-        var b1 = inpuButton(p2, "check", "Check", "lime");
+        var b1 = inpuButton2(p2, "check", "Check", "white");
         eventHandler2(b1, "onclick", function() {
         	concludedExercise = validate(document.getElementById('answer').value, self.translations);
         	if(concludedExercise){
@@ -418,14 +464,14 @@ class Keyboard extends Screen {
         		b1.disabled = true;
         	}
         });
-        var t = inputActiveText(p2, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-        var b2 = inpuButton(p2, "check", "Next exercise ->", "lime");
+        var b2 = inpuButton3(p3, "check", "Next exercise ->", "white");
+        var b3 = inpuButton3(p3, "check", "Give up of lesson", "white");
+        var t = inputActiveText(p5, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
         eventHandler2(b2, "onclick", function(){
         	if(concludedExercise)
         		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
         	self.lesson.nextExercise();
         });
-        var b3 = inpuButton(p2, "check", "Give up of lesson ->", "lime");
         eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         hr(this.body);
     }
@@ -458,21 +504,24 @@ class Pairs extends Screen {
         // a div, only because we want a border
         var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
         h1(d, this.prompt);
-
         var words = this.original.split(" ");
         var solutions = this.solution.split(" ");
         var aux;
         var auxb;
         var buttons = [];
         var p1 = p(d, "padding-left:20px;");
+        var space1 = p(d, "padding-left:20px;");
+        var space2 = p(d, "padding-left:20px;");
+        h1(space1, "");
+        h1(space2, "");
         for (var i = 0; i < words.length; i++) {
-        	buttons[i] = inpuButton(p1, "Check",words[i], "white");
+        	buttons[i] = inpuButton2(p1, "Check",words[i], "white");
         	const index = i;
         	eventHandler2(buttons[i], "onclick", function () {
         		if (aux == undefined){
         			aux = words[index];
         			auxb = buttons[index];
-        			buttons[index].style.backgroundColor = "lime";
+        			buttons[index].style.backgroundColor = "grey";
         		}else{
         			var x = solutions.indexOf(aux);
         			if(x % 2 == 0){
@@ -501,8 +550,12 @@ class Pairs extends Screen {
         	});
         }
         const self = this;
-        var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-        var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
+        var p2 = p(d, "padding-left:20px;");
+        var p3 = p(d, "padding-left:450px;");
+        var p4 = p(d, "padding-left:470px;");
+        var b3 = inpuButton3(p3, "check", "Give up of lesson", "white");
+        var t = inputActiveText(p4, "status", 5, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+        var b2 = inpuButton3(p2, "check", "Next exercise ->", "white");
         eventHandler2(b2, "onclick", function(){
         	var concludedExercise = true;
         	for (var i = 0; i < buttons.length; i++) {
@@ -513,7 +566,6 @@ class Pairs extends Screen {
         		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
         	self.lesson.nextExercise();
         });
-        var b3 = inpuButton(p1, "check", "Give up of lesson ->", "lime");
         eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         hr(this.body);
     }
@@ -575,7 +627,7 @@ class Blocks extends Screen {
 		var t = inputActiveText(p1, "status", 5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
 		var b2 = inpuButton(p1, "check", "Next exercise ->", "lime");
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-		var b3 = inpuButton(p1, "check", "Give up of lesson ->", "lime");
+		var b3 = inpuButton(p1, "check", "Give up of lesson", "lime");
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
 		hr(this.body);
 	}
