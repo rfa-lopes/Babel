@@ -20,7 +20,7 @@ nas suas capacidades de comunicação.
 
 Resumo:
 - o ecrã principal interativo, bem como os ecrãs de exercicios do tipo Keyboard,
-Pairs e Blocks est+a implementado na totalidade;
+Pairs e Blocks estão implementados na totalidade;
 - o ecrã do tipo Symbols encontra se implementado numa fase inicial (um esboço);
 
 01234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -1259,22 +1259,22 @@ class Symbols extends Screen {
 
 function runLanguage(text) {
 	var table="<tr><th>Title</th><th>Artist</th></tr>";
-xmlDoc = text2XML(text);  // assignement to global
-xmlSerializer = new XMLSerializer();  // assignement to global
-// https://www.w3schools.com/xml/dom_nodes_get.asp
-var nodes = xmlDoc.getElementsByTagName("LANGNAME");
-if( nodes.length == 1 ) {
-	languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
-	var languageToUse;
-	if(DynamicHTML.isLanguageExtraAlphabets())
-		languageToUse = new LanguageExtraAlphabets(xmlDoc);
-	else   
-		languageToUse = new Language(xmlDoc);
-}
-else {
-	alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
-	screen0();
-}
+	xmlDoc = text2XML(text);  // assignement to global
+	xmlSerializer = new XMLSerializer();  // assignement to global
+	// https://www.w3schools.com/xml/dom_nodes_get.asp
+	var nodes = xmlDoc.getElementsByTagName("LANGNAME");
+	if( nodes.length == 1 ) {
+		languageName = nodes[0].childNodes[0].nodeValue;// assignement to global
+		var languageToUse;
+		if(DynamicHTML.isLanguageExtraAlphabets())
+			languageToUse = new LanguageExtraAlphabets(xmlDoc);
+		else   
+			languageToUse = new Language(xmlDoc);
+	}
+	else {
+		alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
+		screen0();
+	}
 }
 
 function onLoad() {
