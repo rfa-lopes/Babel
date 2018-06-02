@@ -14,8 +14,4 @@ disponíveis, a que pretendemos realizar
 --------------------------------------------------------------------------------
 
 
-A fazer :
-
-- trocar botao com numero de tentativas para text (??)
-
 

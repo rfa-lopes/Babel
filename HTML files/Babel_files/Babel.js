@@ -666,7 +666,6 @@ class Keyboard extends Screen { //Keybord Exercise
 		var t = text(p5, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-		hr(this.body);
 	}
 }
 
@@ -1009,10 +1008,18 @@ class Symbols extends Screen {
 			divisions[index].sol = buttons[indexToUse].value; 
 			}); 
 		} 
-		
 		var p4 = p(d, "padding-left:20px;"); 
-		var b3 = inpuButton(p4, "check", "Give up of lesson", "white", 2); 
-		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});  
+		
+		if(this.soundDir != null){
+			var i = img(p4, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
+			eventHandler2(i, "onclick", function() {play(self.soundDir);});
+		}else alert(this.commentToShow);
+		
+		var b4 = inpuButton(p4, "check", "Check", "white", null, null, 2);
+		eventHandler2(b4, "onclick", function(){alert("This is not the complete solution.");});
+		var p5 = p(d, "padding-left:20px;"); 
+		var b5 = inpuButton(p5, "check", "Give up of lesson", "white", 2); 
+		eventHandler2(b5, "onclick", function(){self.lesson.endLesson();});  
 	}
 }
 
