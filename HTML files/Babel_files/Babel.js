@@ -358,8 +358,8 @@ class LanguageExtraAlphabets extends Language {
 		return this.HomePage.pageRendering();
 	}
 
-	startSymbolsLesson(index) {
-		//this.symbolsLessons[index].dhfbdb
+	getSymbolsLesson(index) {
+		return this.symbolsLessons[index];
 	}
 }
 /*
@@ -438,14 +438,19 @@ class SymbolsLesson {
 	constructor(xmlLessonInfo, parent) {
 		this.parent = parent;
 		this.saveExercises(xmlLessonInfo);
+		this.lessonComplet = false;
 	}
 
 	saveExercises(xmlLessonInfo) {
 		this.exercise = new Symbols(xmlLessonInfo, this);
 	}
 
+	isSymbolsLessonComplet(){
+		return this.lessonComplet;
+	}
+
 	startExercise(){
-		return this.exercise.pageRendering();
+		this.exercise.pageRendering();
 	}
 }
 
@@ -500,7 +505,7 @@ class HomePage extends Screen {
 
 			buttons[i].onmouseout = function(event) {
 				event.target.style.backgroundColor = 'white';
-				event.target.style.color = "";
+				event.target.style.color = "FireBrick";
 				event.target.style.boxShadow = "";
 			};
 
@@ -519,9 +524,30 @@ class HomePage extends Screen {
 			const self = this;
 			var d = div2(this.body, "border:2px solid SaddleBrown;");
 			var p3 = p(d, "padding-left:20px;");
-			symButtons[w] = inpuButton3(p3, "Check", "Symbols Lesson: "+(w+1), "white", "FireBrick");
-			const index = w;
-			eventHandler2(symButtons[index], "onclick", function () {self.parent.startSymbolsLesson(index);})
+			symButtons[w] = inpuButton3(p3, "Check", "Symbols: "+(w+1), "white", "FireBrick");
+			const indexw = w;
+			if(self.parent.getSymbolsLesson(indexw).isSymbolsLessonComplet()){
+				var hs = h4(d, "Completed!");
+				hs.style.color = "Olive";
+				symButtons[w].disabled = true;
+				d.style.border = "8px solid Olive";
+			}else{
+				var hs = h4(d, "Not Completed!");
+				hs.style.color = "Peru";
+			}
+
+			symButtons[indexw].onmouseout = function(event) {
+				event.target.style.backgroundColor = 'white';
+				event.target.style.color = "FireBrick";
+				event.target.style.boxShadow = "";
+			};
+
+			symButtons[indexw].onmouseover = function(event) {
+				event.target.style.backgroundColor = 'FireBrick';
+				event.target.style.color = "white";
+				event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+			};
+			eventHandler2(symButtons[indexw], "onclick", function () {self.parent.getSymbolsLesson(indexw).startExercise();})
 		}
 	}
 }
@@ -963,12 +989,14 @@ class Blocks extends Screen { //Blocks exercise
 				sucess = false;
 				var b0 = inpuButton3(p4, "check","This is the correct answer: "+self.solution , "white");
 				b0.style.border = "4px solid Olive ";
+				d.style.border = "4px solid Crimson ";
 				play("general/wrong_answer.mp3");
 			}
 			if(sucess){
 				b4.style.backgroundColor = "ForestGreen";
 				b4.style.color = "white";
 				b4.value = "Good!";
+				d.style.border = "4px solid Olive";
 				play("general/right_answer.mp3");
 				self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
 			}
@@ -1024,7 +1052,6 @@ class Symbols extends Screen {
 
 	symbolsSymbName(xmlSymbols) {
 		this.symbName = xmlSymbols.getElementsByTagName("SYMBNAME")[0].childNodes[0].nodeValue;
-		alert(this.symbName);
 	}
 
 
@@ -1032,35 +1059,33 @@ class Symbols extends Screen {
 		this.prompt = null;
 		if (xmlSymbols.getElementsByTagName("PROMPT").length > 0)
 			this.prompt = xmlSymbols.getElementsByTagName("PROMPT")[0].childNodes[0].nodeValue;
-		alert(this.prompt);
 	}
 
 	symbolsAlphabet(xmlSymbols) {
 		this.alphabet = xmlSymbols.getElementsByTagName("ALPHABET")[0].childNodes[0].nodeValue;
-		alert(this.alphabet);
 	}
 
 	symbolsLatin(xmlSymbols) {
 		this.latin = xmlSymbols.getElementsByTagName("LATIN")[0].childNodes[0].nodeValue;
-		alert(this.latin);
 	}
 	
 	symbolsSoundDir(xmlSymbols) {
 		this.soundDir = null;
 		if (xmlSymbols.getElementsByTagName("SOUNDSDIR").length > 0)
 			this.soundDir = xmlSymbols.getElementsByTagName("SOUNDSDIR")[0].childNodes[0].nodeValue;
-		alert(this.soundDir);
 	}
 
 	symbolsComment(xmlSymbols) {
 		this.commentToShow = null;
 		if (xmlSymbols.getElementsByTagName("COMMENT").length > 0)
 			this.commentToShow = xmlSymbols.getElementsByTagName("COMMENT")[0].childNodes[0].nodeValue;
-		alert(this.commentToShow);
 	}
 
 	pageRendering() {
-		//TODO 
+		super.pageRendering();
+		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
+		h1(d, this.prompt+"  (Symbols Exercise)");
+
 	}
 }
 
