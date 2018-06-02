@@ -31,14 +31,7 @@ function play(sound) {
 	else
 		alert("SOUND: " + sound);
 }
-/*
-function validate(answer, solution) {
-	if( answer == solution )
-		play("general/right_answer.mp3");
-	else
-		play("general/wrong_answer.mp3");
-}
-*/ 
+
 function validate(answer, solution) {
 	for (var i = 0; i < solution.length; i++){
 		if( answer == solution[i].childNodes[0].nodeValue ){
@@ -104,23 +97,6 @@ function h1(target, text) {
 	a.style.textShadow = "0.5px 0.5px Olive";
 	return a;
 }
-function h2(target, text) {
-	var a = document.createElement("H2");
-	var b = document.createTextNode(text);
-	a.appendChild(b);
-	target.appendChild(a);
-	a.align = "center";
-	return a;
-}
-
-function h3(target, text) {
-	var a = document.createElement("H3");
-	var b = document.createTextNode(text);
-	a.appendChild(b);
-	target.appendChild(a);
-	a.align = "center";
-	return a;
-}
 
 function h4(target, text) {
 	var a = document.createElement("H4");
@@ -129,24 +105,6 @@ function h4(target, text) {
 	target.appendChild(a);
 	a.style.color = "Tan";
 	a.style.textShadow = "0.5px 0.5px Salmon";
-	a.align = "center";
-	return a;
-}
-
-function h5(target, text) {
-	var a = document.createElement("H5");
-	var b = document.createTextNode(text);
-	a.appendChild(b);
-	target.appendChild(a);
-	a.align = "center";
-	return a;
-}
-
-function h6(target, text) {
-	var a = document.createElement("H6");
-	var b = document.createTextNode(text);
-	a.appendChild(b);
-	target.appendChild(a);
 	a.align = "center";
 	return a;
 }
@@ -204,7 +162,6 @@ function inpuButton(target, id, value, color) {
 	a.id = id;
 	a.value = value;
 	a.style.backgroundColor = color;
-	a.style.cursor = "pointer";
 	target.appendChild(a);
 	return a;
 }
@@ -300,7 +257,7 @@ function div(target, style) {
 	return a;    
 }
 
-function div2(target, style) {
+function div2(target, style) { //Circle
 	var a = document.createElement("DIV");
 	a.style = style;
 	a.style.display = "table"; 
@@ -316,7 +273,7 @@ function div2(target, style) {
 	return a;    
 }
 
-function div3(target, style) {
+function div3(target, style) { //Square
 	var a = document.createElement("DIV");
 	a.style = style;
 	a.style.marginLeft = "20px";
@@ -394,7 +351,6 @@ class LanguageExtraAlphabets extends Language {
 /*
 class DynamicHTML {
     constructor() {}
-
     // para criar buttons com static functions
 }
 */
@@ -402,18 +358,18 @@ class Lesson {
 	constructor(xmlLessonInfo, parent) {
 		this.parent = parent;
 		this.exercises = [];
-		this.exercisesIndex = 0;
+		this.totalExercises = 0;
 		this.currentExercise = 0;
 		this.saveExercisesInArray(xmlLessonInfo);
 	}
 
-	getExerciseIndex(){ return this.currentExercise;}
+	getExerciseIndex(){ return this.currentExercise;} //Index do exercicio currente.
 
-	getNumberExercises(){ return this.exercisesIndex-1;}
+	getNumberExercises(){ return this.totalExercises-1;} //Get total exercises in the lesson.
 
-	ExerciseEnded(lessonIndex){this.exercises[lessonIndex-1] = null;}
+	ExerciseEnded(lessonIndex){this.exercises[lessonIndex-1] = null;} //Make the exercise complete and disappear from the lesson.
 
-	getfirstExercise(){
+	getfirstExercise(){ //Returns the first unfinished exercise.
 		for (var i = 0; i < this.exercises.length; i++) {
 			this.currentExercise = i+1;
 			if(this.exercises[i] != null)
@@ -421,7 +377,7 @@ class Lesson {
 		}
 	}
 
-	getConcludedExercises(){
+	getConcludedExercises(){ //returns the number of completed exercises. 
 		var concludedExercises = 0;
 		for (var i = 0; i < this.exercises.length; i++) {
 			if(this.exercises[i] == null)
@@ -430,34 +386,34 @@ class Lesson {
 		return concludedExercises;
 	}
 
-	saveExercisesInArray(xmlLessonInfo) {
+	saveExercisesInArray(xmlLessonInfo) { //Creates all exercises depending on your screen type.
 		for(var j = 0; j < xmlLessonInfo.length; j++){
 			if(xmlLessonInfo[j].nodeName == "KEYBOARD"){
 				var xmlKeyBoard = xmlLessonInfo[j];
-				this.exercises[this.exercisesIndex++] = new Keyboard(xmlKeyBoard, this);
+				this.exercises[this.totalExercises++] = new Keyboard(xmlKeyBoard, this);
 			}else if(xmlLessonInfo[j].nodeName == "PAIRS"){
 				var xmlPairs = xmlLessonInfo[j];
-				this.exercises[this.exercisesIndex++] = new Pairs(xmlPairs, this);
+				this.exercises[this.totalExercises++] = new Pairs(xmlPairs, this);
 			}else if(xmlLessonInfo[j].nodeName == "BLOCKS"){
 				var xmlBlocks = xmlLessonInfo[j];
-				this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
+				this.exercises[this.totalExercises++] = new Blocks(xmlBlocks, this);
 			}
 		}
-		this.exercises[this.exercisesIndex++] = new endLessonScreen(this);
+		this.exercises[this.totalExercises++] = new endLessonScreen(this); //Last screen.
 	}
 
-	nextExercise() {
-		while(this.exercises[this.currentExercise] == null && this.currentExercise < this.exercisesIndex){
+	nextExercise() { //Get the next Exercise to do.
+		while(this.exercises[this.currentExercise] == null && this.currentExercise < this.totalExercises){
 			this.currentExercise++;
 		}
-		if(this.currentExercise < this.exercisesIndex){
+		if(this.currentExercise < this.totalExercises){
 			this.exercises[this.currentExercise++].pageRendering();
 		}else{ 
 			this.endLesson();
 		}
 	}
 
-	endLesson() {
+	endLesson() { //Finish the lesson and show the main page.
 		this.currentExercise = 0;
 		const self = this;
 		self.parent.startHomepageScreen();
@@ -465,10 +421,11 @@ class Lesson {
 
 }
 
+/*Screen abstract class*/
 class Screen {
 	constructor() {}
 
-	pageRendering() {
+	pageRendering() { //Page Rendering
 		this.body = document.body;
 		this.body.innerHTML = '';
 	}
@@ -483,13 +440,17 @@ class HomePage extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
+
 		h1(this.body, "Choose the lesson you want to do:");
 		var buttons = [];
+
 		for (var i = 0; i < this.numLessons;i++) {
-			const index = i;
 			const self = this;
+			const index = i;
+
 			var concludedExercises = self.parent.getLesson(index).getConcludedExercises();
 			var nrExercises = self.parent.getLesson(index).getNumberExercises();
+
 			if(concludedExercises == nrExercises){
 				var d = div2(this.body, "border:8px solid Olive;");
 			}else if (concludedExercises > 0){
@@ -497,10 +458,25 @@ class HomePage extends Screen {
 			}else{
 				var d = div2(this.body, "border:2px solid SaddleBrown;");
 			}
+
 			var p2 = p(d, "padding-left:20px;");
 			buttons[i] = inpuButton3(p2, "Check", "Lesson: "+(i+1), "white", "FireBrick");
-			h4(d, "Completed Exercises: "+concludedExercises+"/"+nrExercises);				
+			var h0 = h4(d, "Completed Exercises: "+concludedExercises+"/"+nrExercises);	
+
+			buttons[i].onmouseover = function(event) {
+				event.target.style.backgroundColor = 'Peru';
+				event.target.style.color = "white";
+				event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+			};
+
+			buttons[i].onmouseout = function(event) {
+				event.target.style.backgroundColor = 'white';
+				event.target.style.color = "";
+				event.target.style.boxShadow = "";
+			};
+
 			eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
+
 			if(concludedExercises == nrExercises){
 				buttons[index].disabled = true;
 				buttons[index].value = "Completed";
@@ -511,7 +487,7 @@ class HomePage extends Screen {
 	}
 }
 
-class endLessonScreen extends Screen {
+class endLessonScreen extends Screen { //Last Screen
 	constructor(lesson) {
 		super();
 		this.lesson = lesson;
@@ -534,10 +510,34 @@ class endLessonScreen extends Screen {
 			var b = inpuButton4(p1, "check", "No! Go to Home page", "white");
 		}
 		eventHandler2(b, "onclick", function(){self.lesson.nextExercise();});
+
+		b1.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b1.onmouseover = function(event) {
+			event.target.style.backgroundColor = 'Olive';
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
+
+		b.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b.onmouseover = function(event) {
+			event.target.style.backgroundColor = 'Peru';
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
 	}
 }
 
-class Keyboard extends Screen {
+class Keyboard extends Screen { //Keybord Exercise
 	constructor(xmlKeyInfo, lesson) {
 		super();
 		this.xmlKeyInfo = xmlKeyInfo;
@@ -568,59 +568,99 @@ class Keyboard extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
-        // a div, only because we want a border
-        var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
-        h1(d, this.prompt);
+		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
+		h1(d, this.prompt);
 
-        const self = this;
-        // first line
-        var p1 = p(d, "padding-left:40px; word-spacing:50px;");
-        var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
-        if(this.sound != null)
-        	eventHandler2(i, "onclick", function() {play(self.sound);});
-        else 
-        	alert("It is not possible to listen the sound!");
-        text(p1, 16, " ");
-        text(p1, 32, this.original);
+		const self = this;
+		var p1 = p(d, "padding-left:40px; word-spacing:50px;");
+		var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
 
-        // second line
-        var concludedExercise;
-        var p2 = p(d, "padding-left:20px;");
-        var p3 = p(d, "padding-left:20px;");
-        var p5 = p(d, "padding-left:50%;");
-        var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
-        eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
-        text(p2, 16, " ");
-        var b1 = inpuButton2(p2, "check", "Check", "white");
-        eventHandler2(b1, "onclick", function() {
-        	concludedExercise = validate(document.getElementById('answer').value, self.translations);
-        	if(concludedExercise){
-        		i.disabled = true;
-        		b1.disabled = true;
-        		b1.value = "Good!";
-        		b1.style.backgroundColor = "Olive";
-        		d.style.border = "5px solid Olive";
-        		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
-        	}else{
-        		i.disabled = true;
-        		b1.disabled = true;
-        		b1.value = "Failed!";
-        		b1.style.backgroundColor = "Crimson";
-        		d.style.border = "5px solid Crimson";
-        		i.value = self.translations[0].childNodes[0].nodeValue;
-        	}
-        	b1.style.color = "white";
-        });
-        var b2 = inpuButton2(p3, "check", "Next exercise ->", "white");
-        var b3 = inpuButton2(p3, "check", "Give up of lesson", "white");
-        var t = text(p5, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-        eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-        eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-        hr(this.body);
-    }
+		if(this.sound != null)
+			eventHandler2(i, "onclick", function() {play(self.sound);});
+		else alert("It is not possible to listen the sound!");
+
+		text(p1, 16, " ");
+		text(p1, 32, this.original);
+
+		var concludedExercise;
+		var p2 = p(d, "padding-left:20px;");
+		var p3 = p(d, "padding-left:20px;");
+		var p5 = p(d, "padding-left:50%;");
+		var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
+
+		eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
+		text(p2, 16, " ");
+		var b1 = inpuButton2(p2, "check", "Check", "white");
+
+		eventHandler2(b1, "onclick", function() {
+			concludedExercise = validate(document.getElementById('answer').value, self.translations);
+			if(concludedExercise){
+				i.disabled = true;
+				b1.disabled = true;
+				b1.value = "Good!";
+				b1.style.backgroundColor = "Olive";
+				d.style.border = "5px solid Olive";
+				self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
+			}else{
+				i.disabled = true;
+				b1.disabled = true;
+				b1.value = "Failed!";
+				b1.style.backgroundColor = "Crimson";
+				d.style.border = "5px solid Crimson";
+				i.value = self.translations[0].childNodes[0].nodeValue;
+			}
+			b1.style.color = "white";
+		});
+		var b2 = inpuButton2(p3, "check", "Next exercise ->", "white");
+		var b3 = inpuButton2(p3, "check", "Give up of lesson", "white");
+
+		b2.onmouseover = function(event) {
+			if(b1.value == "Good!"){
+				event.target.style.backgroundColor = 'Olive';
+			}else{
+				event.target.style.backgroundColor = 'Crimson';
+			}
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
+
+		b2.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b3.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b3.onmouseover = function(event) {
+			event.target.style.backgroundColor = 'Peru';
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
+
+		b1.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b1.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+		var t = text(p5, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
+		hr(this.body);
+	}
 }
 
-class Pairs extends Screen {
+class Pairs extends Screen { //Pairs Exercise
 	constructor(xmlPairs, lesson) {
 		super();
 		this.xmlPairs = xmlPairs;
@@ -744,6 +784,34 @@ class Pairs extends Screen {
 		var b2 = inpuButton2(p2, "check", "Next exercise ->", "white");
 		var b3 = inpuButton2(p2, "check", "Give up of lesson", "white");
 		var nt = inpuButton5(p2, "check","Has "+(tentativas)+" attempts!" , "white","Olive");
+
+		b2.onmouseover = function(event) {
+			if(nt.value == "Good!"){
+				event.target.style.backgroundColor = 'Olive';
+			}else{
+				event.target.style.backgroundColor = 'Crimson';
+			}
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
+
+		b2.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b3.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b3.onmouseover = function(event) {
+			event.target.style.backgroundColor = 'Peru';
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
 		var t = text(p3, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
@@ -765,7 +833,7 @@ function allowDrop(event1){
 	event1.preventDefault();
 }
 
-class Blocks extends Screen {
+class Blocks extends Screen { //Blocks exercise
 	constructor(xmlBlocks, lesson) {
 		super();
 		this.xmlBlocks = xmlBlocks;
@@ -856,11 +924,13 @@ class Blocks extends Screen {
 				sucess = false;
 				var b0 = inpuButton3(p4, "check","This is the correct answer: "+self.solution , "white");
 				b0.style.border = "4px solid Olive ";
+				play("general/wrong_answer.mp3");
 			}
 			if(sucess){
 				b4.style.backgroundColor = "ForestGreen";
 				b4.style.color = "white";
 				b4.value = "Good!";
+				play("general/right_answer.mp3");
 				self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
 			}
 			b4.disabled = true;
@@ -871,39 +941,36 @@ class Blocks extends Screen {
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
 		var b3 = inpuButton2(p4, "check", "Give up of lesson", "white");
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
+
+		b2.onmouseover = function(event) {
+			if(b4.value == "Good!")
+				event.target.style.backgroundColor = 'Olive';
+			else event.target.style.backgroundColor = 'Crimson';
+			
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
+
+		b2.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b3.onmouseout = function(event) {
+			event.target.style.backgroundColor = 'white';
+			event.target.style.color = "";
+			event.target.style.boxShadow = "";
+		};
+
+		b3.onmouseover = function(event) {
+			event.target.style.backgroundColor = 'Peru';
+			event.target.style.color = "white";
+			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+		};
 	}
 }
-/*
-function screen1() {
-	var body = document.body;
-	// start with a blank page
-	body.innerHTML = '';
 
-	h1(body, "Babel   (" + languageName + ")");
-	hr(body);
-
-	// a div, only because we want a border
-	var d = div(body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
-	h1(d, "Write this in English");
-
-	// first line
-	var p1 = p(d, "padding-left:40px; word-spacing:50px;");
-	var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
-	eventHandler(i, "onclick", "play('japanese/sentences/何時ですか.mp3');");
-	text(p1, 16, " ");
-	text(p1, 32, "何時ですか");
-
-	// second line
-	var p2 = p(d, "padding-left:20px;");
-	var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
-	eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
-	text(p2, 16, " ");
-	var b1 = inpuButton(p2, "check", "Check", "lime");
-	eventHandler(b1, "onclick", "validate(document.getElementById('answer').value, 'What time is it?');");
-
-	hr(body);
-}
-*/
 function runLanguage(text) {
 	var table="<tr><th>Title</th><th>Artist</th></tr>";
     xmlDoc = text2XML(text);  // assignement to global
