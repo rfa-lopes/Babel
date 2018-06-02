@@ -40,7 +40,7 @@ function validate(answer, solution) {
 }
 */ 
 function validate(answer, solution) {
-	for (var i = 0; i < solution.length; i++) 
+	for (var i = 0; i < solution.length; i++){
 		if( answer == solution[i].childNodes[0].nodeValue ){
 			play("general/right_answer.mp3");
 			return true;
@@ -49,44 +49,45 @@ function validate(answer, solution) {
 			return false;
 		}
 	}
+}
 
-	/* XML */
-	/*       https://www.w3schools.com/xml/default.asp  */
+/* XML */
+/*       https://www.w3schools.com/xml/default.asp  */
 
-	function text2XML(text) {
-		parser = new DOMParser();
-		serializer = new XMLSerializer();
-		xmlDoc = parser.parseFromString(text,"text/xml");
-		return xmlDoc;
+function text2XML(text) {
+	parser = new DOMParser();
+	serializer = new XMLSerializer();
+	xmlDoc = parser.parseFromString(text,"text/xml");
+	return xmlDoc;
+}
+
+function XML2Text(xml) {
+	return xmlSerializer.serializeToString(xml);
+}
+
+/* Local files */
+/*        https://www.javascripture.com/FileReader */
+
+function processLocalFile(e, processor) {
+	var file = e.target.files[0];
+	if (!file) {
+		return;
 	}
-
-	function XML2Text(xml) {
-		return xmlSerializer.serializeToString(xml);
-	}
-
-	/* Local files */
-	/*        https://www.javascripture.com/FileReader */
-
-	function processLocalFile(e, processor) {
-		var file = e.target.files[0];
-		if (!file) {
-			return;
-		}
-		var reader = new FileReader();
-		reader.onload = function(e) {
-			processor(e.target.result);
-		};
-		reader.readAsText(file, "UTF-8");
-	}
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		processor(e.target.result);
+	};
+	reader.readAsText(file, "UTF-8");
+}
 
 
-	/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
-	/*        https://www.w3schools.com/js/js_htmldom.asp */
+/* JavaScript HTML DOMhttps://www.w3schools.com/js/js_htmldom.asp */
+/*        https://www.w3schools.com/js/js_htmldom.asp */
 
-	function eventHandler(a, kind, action) {
-		a[kind] = new Function(action);
-		return a;
-	}
+function eventHandler(a, kind, action) {
+	a[kind] = new Function(action);
+	return a;
+}
 
 function eventHandler2(a, kind, action) { // funcao recomendada pelo prof no forum
 	a[kind] = action;
@@ -98,6 +99,55 @@ function h1(target, text) {
 	var b = document.createTextNode(text);
 	a.appendChild(b);
 	target.appendChild(a);
+	a.align = "center";
+	a.style.color = "SaddleBrown";
+	a.style.textShadow = "0.5px 0.5px Olive";
+	return a;
+}
+function h2(target, text) {
+	var a = document.createElement("H2");
+	var b = document.createTextNode(text);
+	a.appendChild(b);
+	target.appendChild(a);
+	a.align = "center";
+	return a;
+}
+
+function h3(target, text) {
+	var a = document.createElement("H3");
+	var b = document.createTextNode(text);
+	a.appendChild(b);
+	target.appendChild(a);
+	a.align = "center";
+	return a;
+}
+
+function h4(target, text) {
+	var a = document.createElement("H4");
+	var b = document.createTextNode(text);
+	a.appendChild(b);
+	target.appendChild(a);
+	a.style.color = "Tan";
+	a.style.textShadow = "0.5px 0.5px Salmon";
+	a.align = "center";
+	return a;
+}
+
+function h5(target, text) {
+	var a = document.createElement("H5");
+	var b = document.createTextNode(text);
+	a.appendChild(b);
+	target.appendChild(a);
+	a.align = "center";
+	return a;
+}
+
+function h6(target, text) {
+	var a = document.createElement("H6");
+	var b = document.createTextNode(text);
+	a.appendChild(b);
+	target.appendChild(a);
+	a.align = "center";
 	return a;
 }
 
@@ -154,6 +204,7 @@ function inpuButton(target, id, value, color) {
 	a.id = id;
 	a.value = value;
 	a.style.backgroundColor = color;
+	a.style.cursor = "pointer";
 	target.appendChild(a);
 	return a;
 }
@@ -163,21 +214,71 @@ function inpuButton2(target, id, value, color) {
 	a.type = "button";
 	a.id = id;
 	a.value = value;
+	a.style.cursor = "pointer";
 	a.style.backgroundColor = color;
+	a.style.border = "2px solid Tan";
 	a.style.margin = "10px";
 	a.style.padding = "15px 15px";
+	a.style.borderRadius = "12px";
 	target.appendChild(a);
 	return a;
 }
 
-function inpuButton3(target, id, value, color) {
+function inpuButton3(target, id, value, color, txtColor) {
 	var a = document.createElement("INPUT");
 	a.type = "button";
 	a.id = id;
 	a.value = value;
 	a.style.backgroundColor = color;
+	a.style.marginTop = "30px";
+	a.style.cursor = "pointer";
+	a.style.color = txtColor;
+	a.style.padding = "20px 46px";
+	target.appendChild(a);
+	a.textAlign = "center";
+	a.style.borderRadius = "12px";
+	a.style.border = "2px solid Tan";
+	return a;
+}
+
+function inpuButton4(target, id, value, color) {
+	var a = document.createElement("INPUT");
+	a.type = "button";
+	a.id = id;
+	a.style.cursor = "pointer";
+	a.value = value;
+	a.style.backgroundColor = color;
+	a.style.border = "2px solid Brown";
 	a.style.margin = "10px";
-	a.style.padding = "10px 10px";
+	a.style.padding = "15px 15px";
+	a.style.borderRadius = "12px";
+	target.appendChild(a);
+	return a;
+}
+
+function inpuButton5(target, id, value, color,bordercolor) {
+	var a = document.createElement("INPUT");
+	a.type = "button";
+	a.id = id;
+	a.value = value;
+	a.style.backgroundColor = color;
+	a.style.border = "5px solid "+bordercolor;
+	a.style.margin = "10px";
+	a.style.padding = "15px 15px";
+	a.style.borderRadius = "12px";
+	target.appendChild(a);
+	return a;
+}
+
+function inpuButton6(target, id, value, color,bordercolor) {
+	var a = document.createElement("INPUT");
+	a.type = "button";
+	a.id = id;
+	a.value = value;
+	a.style.backgroundColor = color;
+	a.style.border = "5px solid "+bordercolor;
+	a.style.padding = "15px 15px";
+	a.style.borderRadius = "12px";
 	target.appendChild(a);
 	return a;
 }
@@ -194,6 +295,38 @@ function div(target, style) {
 	var a = document.createElement("DIV");
 	a.style = style;
 	target.appendChild(a);
+	a.style.borderRadius = "30px";
+	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
+	return a;    
+}
+
+function div2(target, style) {
+	var a = document.createElement("DIV");
+	a.style = style;
+	a.style.display = "table"; 
+	a.style.padding = "20px"; 
+	a.style.marginLeft = "40px";
+	a.style.marginBottom = "2em";
+	a.style.display = "inline-block";
+	a.style.height = "200px";
+	a.style.width = "200px";
+	a.style.borderRadius = "50%";
+	target.appendChild(a);
+	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
+	return a;    
+}
+
+function div3(target, style) {
+	var a = document.createElement("DIV");
+	a.style = style;
+	a.style.marginLeft = "20px";
+	a.style.marginBottom = "1em";
+	a.style.display = "inline-block";
+	a.style.height = "50px";
+	a.style.width = "80px";
+	a.style.borderRadius = "12px";
+	target.appendChild(a);
+	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
 	return a;    
 }
 
@@ -272,63 +405,68 @@ class Lesson {
 		this.exercisesIndex = 0;
 		this.currentExercise = 0;
 		this.saveExercisesInArray(xmlLessonInfo);
-        // podemos criar outro array com os exercicios errados , que necessitamos de voltar a repetir ou ir eliminando há medida que acerta
-    }
+	}
 
-    getExerciseIndex(){ return this.currentExercise;}
+	getExerciseIndex(){ return this.currentExercise;}
 
-    getNumberExercises(){ return this.exercisesIndex-1;}
+	getNumberExercises(){ return this.exercisesIndex-1;}
 
-    ExerciseEnded(lessonIndex){this.exercises[lessonIndex-1] = null;}
+	ExerciseEnded(lessonIndex){this.exercises[lessonIndex-1] = null;}
 
-    getConcludedExercises(){
-    	var concludedExercises = 0;
-    	for (var i = 0; i < this.exercises.length; i++) {
-    		if(this.exercises[i] == null)
-    			concludedExercises++;
-    	}
-    	return concludedExercises;
-    }
+	getfirstExercise(){
+		for (var i = 0; i < this.exercises.length; i++) {
+			this.currentExercise = i+1;
+			if(this.exercises[i] != null)
+				return this.exercises[i].pageRendering();
+		}
+	}
 
-    saveExercisesInArray(xmlLessonInfo) {
-    	for(var j = 0; j < xmlLessonInfo.length; j++){
-    		if(xmlLessonInfo[j].nodeName == "KEYBOARD"){
-    			var xmlKeyBoard = xmlLessonInfo[j];
-    			this.exercises[this.exercisesIndex++] = new Keyboard(xmlKeyBoard, this);
-    		}else if(xmlLessonInfo[j].nodeName == "PAIRS"){
-    			var xmlPairs = xmlLessonInfo[j];
-    			this.exercises[this.exercisesIndex++] = new Pairs(xmlPairs, this);
-    		}else if(xmlLessonInfo[j].nodeName == "BLOCKS"){
-    			var xmlBlocks = xmlLessonInfo[j];
-    			this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
-    		}
-    	}
-    	this.exercises[this.exercisesIndex++] = new endLessonScreen(this);
-    }
+	getConcludedExercises(){
+		var concludedExercises = 0;
+		for (var i = 0; i < this.exercises.length; i++) {
+			if(this.exercises[i] == null)
+				concludedExercises++;
+		}
+		return concludedExercises;
+	}
 
-    nextExercise() {
-    	while(this.exercises[this.currentExercise] == null && this.currentExercise < this.exercisesIndex){
-    		this.currentExercise++;
-    	}
-    	if(this.currentExercise < this.exercisesIndex){
-    		this.exercises[this.currentExercise++].pageRendering();
-    	}else{ 
-    		this.endLesson();
-    	}
-    }
+	saveExercisesInArray(xmlLessonInfo) {
+		for(var j = 0; j < xmlLessonInfo.length; j++){
+			if(xmlLessonInfo[j].nodeName == "KEYBOARD"){
+				var xmlKeyBoard = xmlLessonInfo[j];
+				this.exercises[this.exercisesIndex++] = new Keyboard(xmlKeyBoard, this);
+			}else if(xmlLessonInfo[j].nodeName == "PAIRS"){
+				var xmlPairs = xmlLessonInfo[j];
+				this.exercises[this.exercisesIndex++] = new Pairs(xmlPairs, this);
+			}else if(xmlLessonInfo[j].nodeName == "BLOCKS"){
+				var xmlBlocks = xmlLessonInfo[j];
+				this.exercises[this.exercisesIndex++] = new Blocks(xmlBlocks, this);
+			}
+		}
+		this.exercises[this.exercisesIndex++] = new endLessonScreen(this);
+	}
 
-    endLesson() {
-    	this.currentExercise = 0;
-    	const self = this;
-    	self.parent.startHomepageScreen();
-    }
+	nextExercise() {
+		while(this.exercises[this.currentExercise] == null && this.currentExercise < this.exercisesIndex){
+			this.currentExercise++;
+		}
+		if(this.currentExercise < this.exercisesIndex){
+			this.exercises[this.currentExercise++].pageRendering();
+		}else{ 
+			this.endLesson();
+		}
+	}
+
+	endLesson() {
+		this.currentExercise = 0;
+		const self = this;
+		self.parent.startHomepageScreen();
+	}
 
 }
 
 class Screen {
-	constructor() {
-		this.concluido = false;
-	}
+	constructor() {}
 
 	pageRendering() {
 		this.body = document.body;
@@ -345,7 +483,7 @@ class HomePage extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
-		h1(this.body, "Escolha qual a lição que pretende realizar:");
+		h1(this.body, "Choose the lesson you want to do:");
 		var buttons = [];
 		for (var i = 0; i < this.numLessons;i++) {
 			const index = i;
@@ -353,26 +491,24 @@ class HomePage extends Screen {
 			var concludedExercises = self.parent.getLesson(index).getConcludedExercises();
 			var nrExercises = self.parent.getLesson(index).getNumberExercises();
 			if(concludedExercises == nrExercises){
-				var d = div(this.body, "border:8px solid green; display:table; padding:20px; margin-left:40px; margin-bottom:2em;display: inline-block;");
+				var d = div2(this.body, "border:8px solid Olive;");
 			}else if (concludedExercises > 0){
-				var d = div(this.body, "border:8px solid red; display:table; padding:20px; margin-left:40px;margin-bottom:2em;display: inline-block;");
+				var d = div2(this.body, "border:8px solid Orange;");
 			}else{
-				var d = div(this.body, "border:2px solid black; display:table; padding:20px; margin-left:40px;margin-bottom:2em;display: inline-block;");
+				var d = div2(this.body, "border:2px solid SaddleBrown;");
 			}
-			h1(d, "Esta lição é a Número "+(i+1)+":");
-			h1(d, "Concluidas: "+concludedExercises+"/"+nrExercises);				
-            // first line
-            var p2 = p(d, "padding-left:20px;");
-            buttons[i] = inpuButton3(p2, "Check", "Escolha esta lição", "white");
-            eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
-            if(concludedExercises == nrExercises){
-            	buttons[index].disabled = true;
-            	buttons[index].value = "Concluida";
-            }else if (concludedExercises > 0){
-            	buttons[index].value = "Continue";
-            }
-        }
-    }
+			var p2 = p(d, "padding-left:20px;");
+			buttons[i] = inpuButton3(p2, "Check", "Lesson: "+(i+1), "white", "FireBrick");
+			h4(d, "Completed Exercises: "+concludedExercises+"/"+nrExercises);				
+			eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
+			if(concludedExercises == nrExercises){
+				buttons[index].disabled = true;
+				buttons[index].value = "Completed";
+			}else if (concludedExercises > 0){
+				buttons[index].value = "Continues";
+			}
+		}
+	}
 }
 
 class endLessonScreen extends Screen {
@@ -383,16 +519,20 @@ class endLessonScreen extends Screen {
 	pageRendering() {
 		super.pageRendering();
 		var d;
-		if(this.lesson.getConcludedExercises() == this.lesson.getNumberExercises()){
-			d = div(this.body, "border:3px solid green; display:table; padding:20px; margin-left:40px");
-			h1(d,"Muito bem! Conclui esta lição com sucesso.");
-		}else{
-			d = div(this.body, "border:3px solid red; display:table; padding:20px; margin-left:40px");
-			h1(d,"Ainda não acabou! Volte a repetir esta lição.");
-		}
-		var p1 = p(d, "padding-left:250px;");
-		var b = inpuButton3(p1, "check", "Página Inicial", "white");
 		var self = this;
+		if(this.lesson.getConcludedExercises() == this.lesson.getNumberExercises()){
+			d = div(this.body, "border:3px solid green; display:table; padding:20px; margin-left:30%;margin-top:10%");
+			h1(d,"Very well! Conclude this lesson successfully.");
+			var p1 = p(d, "padding-left:36%;");
+			var b = inpuButton4(p1, "check", "Go to Home page", "white");
+		}else{
+			d = div(this.body, "border:3px solid Crimson; display:table; padding:20px 30px; margin-left:25%;margin-top:10%");
+			h1(d,"Not over yet! Want to repeat this lesson?");
+			var p1 = p(d, "padding-left:25%;");
+			var b1 = inpuButton4(p1, "check", "Yes!", "white");
+			eventHandler2(b1, "onclick", function(){self.lesson.getfirstExercise();});
+			var b = inpuButton4(p1, "check", "No! Go to Home page", "white");
+		}
 		eventHandler2(b, "onclick", function(){self.lesson.nextExercise();});
 	}
 }
@@ -429,7 +569,7 @@ class Keyboard extends Screen {
 	pageRendering() {
 		super.pageRendering();
         // a div, only because we want a border
-        var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px;");
+        var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
         h1(d, this.prompt);
 
         const self = this;
@@ -447,7 +587,7 @@ class Keyboard extends Screen {
         var concludedExercise;
         var p2 = p(d, "padding-left:20px;");
         var p3 = p(d, "padding-left:20px;");
-        var p5 = p(d, "padding-left:470px;");
+        var p5 = p(d, "padding-left:50%;");
         var i = inputActiveText(p2, "answer", 40, 24, "Type this in English");
         eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
         text(p2, 16, " ");
@@ -457,19 +597,24 @@ class Keyboard extends Screen {
         	if(concludedExercise){
         		i.disabled = true;
         		b1.disabled = true;
+        		b1.value = "Good!";
+        		b1.style.backgroundColor = "Olive";
+        		d.style.border = "5px solid Olive";
+        		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
         	}else{
         		i.disabled = true;
         		b1.disabled = true;
+        		b1.value = "Failed!";
+        		b1.style.backgroundColor = "Crimson";
+        		d.style.border = "5px solid Crimson";
+        		i.value = self.translations[0].childNodes[0].nodeValue;
         	}
+        	b1.style.color = "white";
         });
-        var b2 = inpuButton3(p3, "check", "Next exercise ->", "white");
-        var b3 = inpuButton3(p3, "check", "Give up of lesson", "white");
-        var t = text(p3, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-        eventHandler2(b2, "onclick", function(){
-        	if(concludedExercise)
-        		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
-        	self.lesson.nextExercise();
-        });
+        var b2 = inpuButton2(p3, "check", "Next exercise ->", "white");
+        var b3 = inpuButton2(p3, "check", "Give up of lesson", "white");
+        var t = text(p5, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+        eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
         eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
         hr(this.body);
     }
@@ -499,78 +644,111 @@ class Pairs extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
-        // a div, only because we want a border
-        var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px");
-        h1(d, this.prompt);
-        var words = this.original.split(" ");
-        var solutions = this.solution.split(" ");
-        var aux;
-        var auxb;
-        var buttons = [];
-        var p1 = p(d, "padding-left:20px;");
-        var failsCount = 0;
-        for (var i = 0; i < words.length; i++) {
-        	buttons[i] = inpuButton2(p1, "Check",words[i], "white");
-        	const index = i;
-        	eventHandler2(buttons[i], "onclick", function () {
-        		if (aux == undefined){
-        			aux = words[index];
-        			auxb = buttons[index];
-        			buttons[index].style.backgroundColor = "grey";
-        		}else{
-        			var x = solutions.indexOf(aux);
-        			if(x % 2 == 0){
-        				if(solutions[x+1] == words[index])
-        					acertou();
-        				else 
-        					falhou();
-        			}else{
-        				if(solutions[x-1] == words[index])
-        					acertou();
-        				else 
-        					falhou();
-        			}
-        			aux = undefined;
-        		}
-        		function falhou(){
-        			buttons[index].style.backgroundColor = "white";
-        			auxb.style.backgroundColor = "white";
-        			failsCount++;
-        			if(failsCount == 3){
-        				for (var i = 0; i < buttons.length; i++) {
-        					buttons[i].disabled = true;
-        					buttons[i].style.backgroundColor = "red";
-        				}
-        			}
-        		}
-        		function acertou(){
-        			buttons[index].style.backgroundColor = "lime";
-        			auxb.style.backgroundColor = "lime";
-        			buttons[index].disabled = true;
-        			auxb.disabled = true;
-        		}
-        	});
-        }
-        const self = this;
-        var p2 = p(d, "padding-left:20px;");
-        var p3 = p(d, "padding-left:450px;");
-        var p4 = p(d, "padding-left:470px;");
-        var b3 = inpuButton3(p3, "check", "Give up of lesson", "white");
-        var t = text(p1, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-        var b2 = inpuButton3(p2, "check", "Next exercise ->", "white");
-        eventHandler2(b2, "onclick", function(){
-        	var concludedExercise = true;
-        	for (var i = 0; i < buttons.length; i++) {
-        		if(buttons[i].style.backgroundColor != "lime")
-        			concludedExercise = false;
-        	}
-        	if(concludedExercise)
-        		self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
-        	self.lesson.nextExercise();
-        });
-        eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-        hr(this.body);
-    }
+		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px");
+		h1(d, this.prompt);
+		const self = this;
+		var words = this.original.split(" ");
+		var solutions = this.solution.split(" ");
+		var aux;
+		var auxb;
+		var buttons = [];
+		var p1 = p(d, "padding-left:20px;");
+		var failsCount = 0;
+		var tentativas = 3;
+		for (var i = 0; i < words.length; i++) {
+			buttons[i] = inpuButton4(p1, "Check",words[i], "white");
+			const index = i;
+			eventHandler2(buttons[i], "onclick", function () {
+				if (aux == undefined){
+					aux = words[index];
+					auxb = buttons[index];
+					buttons[index].style.backgroundColor = "PaleGoldenRod";
+				}else{
+					var x = solutions.indexOf(aux);
+					if(x % 2 == 0){
+						if(solutions[x+1] == words[index])
+							acertou();
+						else 
+							falhou();
+					}else{
+						if(solutions[x-1] == words[index])
+							acertou();
+						else 
+							falhou();
+					}
+					aux = undefined;
+				}
+				function falhou(){
+					buttons[index].style.backgroundColor = "white";
+					auxb.style.backgroundColor = "white";
+					failsCount++;
+					tentativas--;
+					nt.value = "Has "+tentativas+" attempts!";
+					if(tentativas == 2){
+						nt.style.border = "5px solid DarkOrange";
+					}else if(tentativas == 1){
+						nt.style.border = "5px solid Tomato";
+					}else if(tentativas == 0){
+						nt.style.border = "5px solid Crimson";
+						nt.style.backgroundColor = "Crimson";
+						nt.style.color = "white";
+						nt.value = "Failed!";
+						d.style.border = "5px solid Crimson";
+						play("general/wrong_answer.mp3");
+					}
+				}
+
+				function acertou(){
+					buttons[index].style.backgroundColor = "Olive";
+					auxb.style.backgroundColor = "Olive";
+					buttons[index].style.color = "white";
+					auxb.style.color = "white";
+					buttons[index].disabled = true;
+					auxb.disabled = true;
+				}
+
+				if(failsCount == 3){
+					for (var i = 0; i < buttons.length; i++) {
+						buttons[i].disabled = true;
+						buttons[i].style.backgroundColor = "Crimson";
+						buttons[i].style.color = "white";
+					}
+					var sol = "";
+					for (var i = 0; i < solutions.length; i++) {
+						if(i%2 == 0)
+							sol += solutions[i]+" -> "+solutions[i+1]+"  /  ";
+					}
+					var b0 = inpuButton5(p2, "check",sol , "white", "Olive");
+				}else{
+					var concludedExercise = true;
+					for (var i = 0; i < buttons.length; i++) {
+						if(buttons[i].style.color != "white")
+							concludedExercise = false;
+					}
+					if(concludedExercise){
+						self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
+						for (var i = 0; i < buttons.length; i++) {
+							buttons[i].style.backgroundColor = "GoldenRod";
+						}
+						nt.value = "Good!";
+						nt.style.backgroundColor = "Olive";
+						d.style.border = "5px solid Olive";
+						nt.style.color = "white";
+						play("general/right_answer.mp3");
+					}
+				}
+			});
+		}
+		var p2 = p(d, "padding-left:20px;");
+		var p3 = p(d, "padding-left:50%;");
+		var b2 = inpuButton2(p2, "check", "Next exercise ->", "white");
+		var b3 = inpuButton2(p2, "check", "Give up of lesson", "white");
+		var nt = inpuButton5(p2, "check","Has "+(tentativas)+" attempts!" , "white","Olive");
+		var t = text(p3, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
+		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
+		hr(this.body);
+	}
 }
 
 function drag(event1){
@@ -616,7 +794,7 @@ class Blocks extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:3px solid black; display:table; padding:20px; margin-left:40px;");
+		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
 		h1(d, this.prompt);
 
 		var blocks = this.block.split(" ");
@@ -631,14 +809,14 @@ class Blocks extends Screen {
 
 		var p2 = p(d, "padding-left:20px;");
 		for (var i = 0; i < solutions.length; i++) {
-			divisions[i] = div(p2,"border:1px solid black;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
+			divisions[i] = div3(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
 		}
-		var p3 = p(d, "padding-left:10px;");
+		var p3 = p(d, "padding-left:20px;");
 		hr(p3);
 		for (var j = 0; j < blocks.length; j++) {
 			const index = j;
-			divisions2[index] = div(p3,"border:1px solid black;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
-			buttons[index] =  inpuButton2(divisions2[index], index, blocks[index], "indexborder:2px solid black;display:table; padding:10px; margin-left:40px;");
+			divisions2[index] = div3(p3,"border:2px Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
+			buttons[index] =  inpuButton6(divisions2[index], index, blocks[index], "");
 			buttons[index].draggable = "true";
 			eventHandler2(buttons[index], "ondragstart", function () {drag(event);});
 		}
@@ -656,13 +834,13 @@ class Blocks extends Screen {
 			});
 		}
 
-		var p4 = p(d, "padding-left:10px;");
+		var p4 = p(d, "padding-left:20px;");
+		var p5 = p(d, "padding-left:50%;");
 		const self = this;
-		var b4 = inpuButton3(p4, "check", "Check", "white");
+		var b4 = inpuButton2(p4, "check", "Check", "white");
 		eventHandler2(b4, "onclick", function(){
 			var sucess = true;
 			for (var i = 0; i < solutions.length; i++) {
-				alert(solutions[i]==divisions[i].sol);
 				if(divisions[i].sol == undefined){
 					falhou();
 					break;
@@ -672,22 +850,26 @@ class Blocks extends Screen {
 				}
 			}
 			function falhou(){
-				alert("This is the correct answer: "+self.solution);
 				b4.style.backgroundColor = "Crimson";
-				b4.value = "Falhou";
+				b4.style.color = "white";
+				b4.value = "Failed";
 				sucess = false;
+				var b0 = inpuButton3(p4, "check","This is the correct answer: "+self.solution , "white");
+				b0.style.border = "4px solid Olive ";
 			}
 			if(sucess){
 				b4.style.backgroundColor = "ForestGreen";
-				b4.value = "Parabéns!!";
+				b4.style.color = "white";
+				b4.value = "Good!";
+				self.lesson.ExerciseEnded(self.lesson.getExerciseIndex());
 			}
 			b4.disabled = true;
 		});
 
-		var t = text(p4, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-		var b2 = inpuButton3(p4, "check", "Next exercise ->", "white");
+		var t = text(p5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
+		var b2 = inpuButton2(p4, "check", "Next exercise ->", "white");
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-		var b3 = inpuButton3(p4, "check", "Give up of lesson", "white");
+		var b3 = inpuButton2(p4, "check", "Give up of lesson", "white");
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
 	}
 }
