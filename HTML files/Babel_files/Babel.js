@@ -1001,6 +1001,7 @@ class Symbols extends Screen {
 		super.pageRendering();
 		var self = this;
 		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;", 1);
+		d.style.backgroundColor = "LemonChiffon ";
 		h1(d, this.symbName+"  - Practice", 1);
 		if(this.prompt != null)
 			h1(d, this.prompt, 1);
@@ -1017,7 +1018,7 @@ class Symbols extends Screen {
 		for (var i = 0; i < alphabet.length; i++) { 
 			divisions[i] = div(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;", 4); 
 			headers[i] = h1(divisions[i],latin[i], 2);
-			headers[i].style.color = "white";
+			headers[i].style.color = "black";
 			divisions[i].style.backgroundColor = "LightSalmon"; 
 		} 
 		var p3 = p(d, "padding-left:20px;"); 
