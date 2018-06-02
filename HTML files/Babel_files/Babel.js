@@ -307,7 +307,6 @@ class Language {
 		this.saveLanguageName(xmlDocument);
 		this.saveSoundPrefix(xmlDocument);
 		this.saveLessons(xmlDocument);
-		this.HomePage = new HomePage(this.lessons.length, this);
 		this.startHomepageScreen();
 	}
 
@@ -327,6 +326,7 @@ class Language {
 	}
 
 	startHomepageScreen() {
+		this.HomePage = new HomePage(this.lessons.length, 0,this);
 		return this.HomePage.pageRendering();
 	}
 
@@ -337,8 +337,6 @@ class Language {
 	getLesson(lessonIndex){
 		return this.lessons[lessonIndex];
 	}
-
-	//criar botao que permite sair da homepage e recomecar tudo de novo !
 }
 
 class LanguageExtraAlphabets extends Language {
@@ -346,7 +344,23 @@ class LanguageExtraAlphabets extends Language {
 		super(xmlDocument);
 	}
 
-	SymbolsScreen() {}
+	saveLessons(xmlDocument){
+		super.saveLessons(xmlDocument);
+		this.symbolsLessons = [];
+		var xmlSymbols = xmlDocument.getElementsByTagName("SYMBOLS");
+		for(var w = 0; w < xmlSymbols.length; w++){
+			this.symbolsLessons[w] = new SymbolsLesson(xmlSymbols[w],this);
+		}
+	}
+
+	startHomepageScreen() {
+		this.HomePage = new HomePage(this.lessons.length, this.symbolsLessons.length,this);
+		return this.HomePage.pageRendering();
+	}
+
+	startSymbolsLesson(index) {
+		//this.symbolsLessons[index].dhfbdb
+	}
 }
 /*
 class DynamicHTML {
@@ -418,7 +432,21 @@ class Lesson {
 		const self = this;
 		self.parent.startHomepageScreen();
 	}
+}
 
+class SymbolsLesson {
+	constructor(xmlLessonInfo, parent) {
+		this.parent = parent;
+		this.saveExercises(xmlLessonInfo);
+	}
+
+	saveExercises(xmlLessonInfo) {
+		this.exercise = new Symbols(xmlLessonInfo, this);
+	}
+
+	startExercise(){
+		return this.exercise.pageRendering();
+	}
 }
 
 /*Screen abstract class*/
@@ -432,9 +460,10 @@ class Screen {
 }
 
 class HomePage extends Screen {
-	constructor(numLessons, parent) {
+	constructor(numLessons, numSymbolsLessons, parent) {
 		super();
 		this.numLessons = numLessons;
+		this.numSymbolsLessons = numSymbolsLessons;
 		this.parent = parent;
 	}
 
@@ -483,6 +512,16 @@ class HomePage extends Screen {
 			}else if (concludedExercises > 0){
 				buttons[index].value = "Continues";
 			}
+		}
+
+		var symButtons = [];
+		for(var w = 0; w < this.numSymbolsLessons; w++){
+			const self = this;
+			var d = div2(this.body, "border:2px solid SaddleBrown;");
+			var p3 = p(d, "padding-left:20px;");
+			symButtons[w] = inpuButton3(p3, "Check", "Symbols Lesson: "+(w+1), "white", "FireBrick");
+			const index = w;
+			eventHandler2(symButtons[index], "onclick", function () {self.parent.startSymbolsLesson(index);})
 		}
 	}
 }
@@ -968,6 +1007,60 @@ class Blocks extends Screen { //Blocks exercise
 			event.target.style.color = "white";
 			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
 		};
+	}
+}
+
+class Symbols extends Screen {
+	constructor(xmlSymbols, lesson) {
+		super();
+		this.symbolsSymbName(xmlSymbols);
+		this.symbolsPrompt(xmlSymbols);
+		this.symbolsAlphabet(xmlSymbols);
+		this.symbolsLatin(xmlSymbols);
+		this.symbolsSoundDir(xmlSymbols);
+		this.symbolsComment(xmlSymbols);
+		this.lesson = lesson;
+	}
+
+	symbolsSymbName(xmlSymbols) {
+		this.symbName = xmlSymbols.getElementsByTagName("SYMBNAME")[0].childNodes[0].nodeValue;
+		alert(this.symbName);
+	}
+
+
+	symbolsPrompt(xmlSymbols) {
+		this.prompt = null;
+		if (xmlSymbols.getElementsByTagName("PROMPT").length > 0)
+			this.prompt = xmlSymbols.getElementsByTagName("PROMPT")[0].childNodes[0].nodeValue;
+		alert(this.prompt);
+	}
+
+	symbolsAlphabet(xmlSymbols) {
+		this.alphabet = xmlSymbols.getElementsByTagName("ALPHABET")[0].childNodes[0].nodeValue;
+		alert(this.alphabet);
+	}
+
+	symbolsLatin(xmlSymbols) {
+		this.latin = xmlSymbols.getElementsByTagName("LATIN")[0].childNodes[0].nodeValue;
+		alert(this.latin);
+	}
+	
+	symbolsSoundDir(xmlSymbols) {
+		this.soundDir = null;
+		if (xmlSymbols.getElementsByTagName("SOUNDSDIR").length > 0)
+			this.soundDir = xmlSymbols.getElementsByTagName("SOUNDSDIR")[0].childNodes[0].nodeValue;
+		alert(this.soundDir);
+	}
+
+	symbolsComment(xmlSymbols) {
+		this.commentToShow = null;
+		if (xmlSymbols.getElementsByTagName("COMMENT").length > 0)
+			this.commentToShow = xmlSymbols.getElementsByTagName("COMMENT")[0].childNodes[0].nodeValue;
+		alert(this.commentToShow);
+	}
+
+	pageRendering() {
+		//TODO 
 	}
 }
 
