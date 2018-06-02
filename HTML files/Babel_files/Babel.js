@@ -189,8 +189,8 @@ function inpuButton(target, id, value, color, txtColor, bordercolor, typeOf) {
 	target.appendChild(a);
 	return a;
 }
-   
-  function inpuButton6(target, id, value, color,bordercolor) {
+
+function inpuButton6(target, id, value, color,bordercolor) {
 	var a = document.createElement("INPUT");
 	a.type = "button";
 	a.id = id;
@@ -201,7 +201,7 @@ function inpuButton(target, id, value, color, txtColor, bordercolor, typeOf) {
 	a.style.borderRadius = "12px";
 	target.appendChild(a);
 	return a;
-  }
+}
 
 function inpuFile(target, id, ) {
 	var a = document.createElement("INPUT");
@@ -225,22 +225,22 @@ function div(target, style, typeOf) {
 		a.style.display = "inline-block";
 		a.style.height = "200px";
 		a.style.width = "200px";
-		a.style.borderRadius = "50%";
+		a.style.borderRadius = "25%";
 	}else if(typeOf == 3) { //Square
 		a.style = style;
 		a.style.marginLeft = "20px";
 		a.style.marginBottom = "1em";
 		a.style.display = "inline-block";
 		a.style.height = "20px"; 
-  		a.style.width = "40px"; 
+		a.style.width = "40px"; 
 		a.style.borderRadius = "12px";
 	}else{
 		a.style.marginLeft = "20px"; 
-  		a.style.marginBottom = "1em"; 
-  		a.style.display = "inline-block"; 
-  		a.style.height = "5px"; 
-  		a.style.width = "5px"; 
-  		a.style.borderRadius = "12px"; 
+		a.style.marginBottom = "1em"; 
+		a.style.display = "inline-block"; 
+		a.style.height = "5px"; 
+		a.style.width = "5px"; 
+		a.style.borderRadius = "12px"; 
 	}
 	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
 	return a;    
@@ -274,6 +274,11 @@ class DynamicHTML {
 		event.target.style.color = "FireBrick";
 		event.target.style.boxShadow = "";
 	}
+	static onMouseOutKhaki (event) {
+		event.target.style.backgroundColor = 'Khaki';
+		event.target.style.color = "FireBrick";
+		event.target.style.boxShadow = "";
+	}
 	//function(event) {DynamicHTML.onMouseOverFireBrick(event);};
 	static onMouseOverFireBrick (event) {
 		event.target.style.backgroundColor = 'FireBrick';
@@ -289,6 +294,12 @@ class DynamicHTML {
 	//function(event) {DynamicHTML.onMouseOverPeru(event);};
 	static onMouseOverPeru (event) {
 		event.target.style.backgroundColor = 'Peru';
+		event.target.style.color = "white";
+		event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+	}
+
+	static onMouseOverKhaki (event) {
+		event.target.style.backgroundColor = 'Khaki';
 		event.target.style.color = "white";
 		event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
 	}
@@ -460,6 +471,10 @@ class SymbolsLesson {
 		return this.lessonComplet;
 	}
 
+	lessonEnded(){
+		this.lessonComplet = true;
+	}
+
 	startExercise(){
 		this.exercise.pageRendering();
 	}
@@ -467,7 +482,7 @@ class SymbolsLesson {
 	endLesson(){ 
 		const self = this; 
 		self.parent.startHomepageScreen(); 
-	  } 
+	} 
 }
 
 /*Screen abstract class*/
@@ -490,11 +505,14 @@ class HomePage extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
-
+		this.body.style.backgroundColor = "BurlyWood ";
 		h1(this.body, "Choose the lesson you want to do:", 1);
+		
 		var buttons = [];
-
+		var d = [];
+		
 		for (var i = 0; i < this.numLessons;i++) {
+			
 			const self = this;
 			const index = i;
 
@@ -502,19 +520,22 @@ class HomePage extends Screen {
 			var nrExercises = self.parent.getLesson(index).getNumberExercises();
 
 			if(concludedExercises == nrExercises){
-				var d = div(this.body, "border:8px solid Olive;", 2);
+				d[i] = div(this.body, "border:8px solid Olive;", 2);
 			}else if (concludedExercises > 0){
-				var d = div(this.body, "border:8px solid Orange;", 2);
+				d[i] = div(this.body, "border:8px solid Orange;", 2);
 			}else{
-				var d = div(this.body, "border:2px solid SaddleBrown;", 2);
+				d[i] = div(this.body, "border:2px solid SaddleBrown;", 2);
 			}
 
-			var p2 = p(d, "padding-left:20px;");
-			buttons[i] = inpuButton(p2, "Check", "Lesson: "+(i+1), "white", "FireBrick", null, 3);
-			var h0 = h1(d, "Completed Exercises: "+concludedExercises+"/"+nrExercises, 4);	
+			d[i].style.backgroundColor = "Chocolate ";
+
+			var p2 = p(d[i], "padding-left:20px;");
+			buttons[i] = inpuButton(p2, "Check", "Lesson: "+(i+1), "Khaki", "FireBrick", null, 3);
+			var h0 = h1(d[i], "Completed Exercises: "+concludedExercises+"/"+nrExercises, 4);
+			h0.style.color = "white";
 			
 			buttons[i].onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
-			buttons[i].onmouseout = function(event) {DynamicHTML.onMouseOutFireBrick(event);};
+			buttons[i].onmouseout = function(event) {DynamicHTML.onMouseOutKhaki(event);};
 			eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
 
 			if(concludedExercises == nrExercises){
@@ -526,20 +547,22 @@ class HomePage extends Screen {
 		}
 
 		var symButtons = [];
+		var ds = [];
 		for(var w = 0; w < this.numSymbolsLessons; w++){
 			const self = this;
-			var d = div(this.body, "border:2px solid SaddleBrown;", 2);
-			var p3 = p(d, "padding-left:20px;");
+			ds[i] = div(this.body, "border:4px solid SaddleBrown; background-color:Chocolate ", 2);
+			ds[i].style.borderRadius = "50%";
+			var p3 = p(ds[i], "padding-left:20px;");
 			symButtons[w] = inpuButton(p3, "Check", "Symbols: "+(w+1), "white", "FireBrick", null, 3);
 			const indexw = w;
 			if(self.parent.getSymbolsLesson(indexw).isSymbolsLessonComplet()){
-				var hs = h1(d, "Completed!", 4);
-				hs.style.color = "Olive";
+				var hs = h1(ds[i], "Completed!", 4);
+				hs.style.color = "white";
 				symButtons[w].disabled = true;
-				d.style.border = "8px solid Olive";
+				ds[i].style.border = "8px solid Olive";
 			}else{
-				var hs = h1(d, "Not Completed!", 4);
-				hs.style.color = "Peru";
+				var hs = h1(ds[i], "Not Completed!", 4);
+				hs.style.color = "white";
 			}
 
 			symButtons[indexw].onmouseout = function(event) {DynamicHTML.onMouseOutFireBrick(event);};
@@ -559,21 +582,23 @@ class endLessonScreen extends Screen { //Last Screen
 		var d;
 		var self = this;
 		if(this.lesson.getConcludedExercises() == this.lesson.getNumberExercises()){
-			d = div(this.body, "border:3px solid green; display:table; padding:20px; margin-left:30%;margin-top:10%", 1);
+			d = div(this.body, "border:3px solid green; display:table; padding:20px; margin:auto;margin-top:10%", 1);
+			d.style.backgroundColor = "DarkSeaGreen ";
 			h1(d,"Very well! Conclude this lesson successfully.", 1);
 			var p1 = p(d, "padding-left:36%;");
 			var b = inpuButton(p1, "check", "Go to Home page", "white", null, null, 4);
 		}else{
-			d = div(this.body, "border:3px solid Crimson; display:table; padding:20px 30px; margin-left:25%;margin-top:10%", 1);
+			d = div(this.body, "border:3px solid Crimson; display:table; padding:20px 30px; margin:auto;margin-top:10%", 1);
+			d.style.backgroundColor = "SandyBrown ";
 			h1(d,"Not over yet! Want to repeat this lesson?", 1);
 			var p1 = p(d, "padding-left:25%;");
 			var b1 = inpuButton(p1, "check", "Yes!", "white", null, null, 4);
 			eventHandler2(b1, "onclick", function(){self.lesson.getfirstExercise();});
 			var b = inpuButton(p1, "check", "No! Go to Home page", "white", null, null, 4);
+			b1.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+			b1.onmouseover = function(event) {DynamicHTML.onMouseOverOlive(event);};
 		}
 		eventHandler2(b, "onclick", function(){self.lesson.nextExercise();});
-		b1.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
-		b1.onmouseover = function(event) {DynamicHTML.onMouseOverOlive(event);};
 		b.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
 		b.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
 	}
@@ -610,16 +635,21 @@ class Keyboard extends Screen { //Keybord Exercise
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px;", 1);
+		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin:auto;", 1);
+		d.style.backgroundColor = "LightSalmon";
 		h1(d, this.prompt, 1);
 
 		const self = this;
 		var p1 = p(d, "padding-left:40px; word-spacing:50px;");
-		var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
 
-		if(this.sound != null)
+		if(this.sound != null){
+			var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
 			eventHandler2(i, "onclick", function() {play(self.sound);});
-		else alert("It is not possible to listen the sound!");
+		}
+		else {
+			var i = img(p1, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-Low-Volume-icon.png");
+			eventHandler2(i, "onclick", function() {play("general/wrong_answer.mp3");});
+		}
 
 		text(p1, 16, " ");
 		text(p1, 32, this.original);
@@ -693,7 +723,8 @@ class Pairs extends Screen { //Pairs Exercise
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px", 1);
+		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin:auto;", 1);
+		d.style.backgroundColor = "PeachPuff ";
 		h1(d, this.prompt, 1);
 		const self = this;
 		var words = this.original.split(" ");
@@ -802,7 +833,6 @@ class Pairs extends Screen { //Pairs Exercise
 		var t = text(p3, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
-		hr(this.body);
 	}
 }
 
@@ -835,14 +865,15 @@ class Blocks extends Screen { //Blocks exercise
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;", 1);
+		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px;margin:auto;", 1);
+		d.style.backgroundColor = "Moccasin";
 		h1(d, this.prompt, 1);
-
 		var blocks = this.block.split(" ");
 		var solutions = this.solution.split(" ");
 
 		var p1 = p(d, "padding-left:10px;");
-		h1(p1,this.original, 1);
+		var or = h1(p1,this.original, 1);
+		or.style.color = "white";
 
 		var buttons = [];
 		var divisions = [];
@@ -851,12 +882,13 @@ class Blocks extends Screen { //Blocks exercise
 		var p2 = p(d, "padding-left:20px;");
 		for (var i = 0; i < solutions.length; i++) {
 			divisions[i] = div(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;", 3);
+			divisions[i].style.backgroundColor = "LightSalmon  ";
 		}
 		var p3 = p(d, "padding-left:20px;");
-		hr(p3);
 		for (var j = 0; j < blocks.length; j++) {
 			const index = j;
 			divisions2[index] = div(p3,"border:2px Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;", 3);
+			divisions2[index].style.backgroundColor = "LightSalmon  ";
 			buttons[index] =  inpuButton(divisions2[index], index, blocks[index], null,"", 6);
 			buttons[index].draggable = "true";
 			eventHandler2(buttons[index], "ondragstart", function () {DynamicHTML.drag(event);});
@@ -972,7 +1004,7 @@ class Symbols extends Screen {
 		h1(d, this.symbName+"  - Practice", 1);
 		if(this.prompt != null)
 			h1(d, this.prompt, 1);
-		 
+
 		var latin = this.latin.split(" "); 
 		var alphabet = this.alphabet.split(" ");  
 		
@@ -984,7 +1016,9 @@ class Symbols extends Screen {
 		var p2 = p(d, "padding-left:20px;"); 
 		for (var i = 0; i < alphabet.length; i++) { 
 			divisions[i] = div(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;", 4); 
-			headers[i] = h1(divisions[i],latin[i], 2); 
+			headers[i] = h1(divisions[i],latin[i], 2);
+			headers[i].style.color = "white";
+			divisions[i].style.backgroundColor = "LightSalmon"; 
 		} 
 		var p3 = p(d, "padding-left:20px;"); 
 		hr(p3); 
@@ -994,6 +1028,7 @@ class Symbols extends Screen {
 			buttons[index] =  inpuButton(divisions2[index], index, alphabet[index], null, "", 6); 
 			buttons[index].draggable = "true"; 
 			eventHandler2(buttons[index], "ondragstart", function () {DynamicHTML.drag(event);}); 
+			divisions2[index].style.backgroundColor = "LightSalmon  ";
 		} 
 		
 		for (var i = 0; i < latin.length; i++) { 
@@ -1003,9 +1038,9 @@ class Symbols extends Screen {
 			eventHandler2(divisions[index], "ondragstart", function () {DynamicHTML.drag(event); divisions[index].isPossible = true;}); 
 			eventHandler2(divisions[index], "ondragover", function () {if(divisions[index].isPossible) DynamicHTML.allowDrop(event);}); 
 			eventHandler2(divisions[index], "ondrop", function () { 
-			DynamicHTML.drop(event);divisions[index].isPossible = false; 
-			var indexToUse = event.dataTransfer.getData("text"); 
-			divisions[index].sol = buttons[indexToUse].value; 
+				DynamicHTML.drop(event);divisions[index].isPossible = false; 
+				var indexToUse = event.dataTransfer.getData("text"); 
+				divisions[index].sol = buttons[indexToUse].value; 
 			}); 
 		} 
 		var p4 = p(d, "padding-left:20px;"); 
@@ -1013,13 +1048,45 @@ class Symbols extends Screen {
 		if(this.soundDir != null){
 			var i = img(p4, "http://icons.iconarchive.com/icons/icons8/ios7/32/Media-Controls-High-Volume-icon.png");
 			eventHandler2(i, "onclick", function() {play(self.soundDir);});
-		}else alert(this.commentToShow);
+		}else var b7 = inpuButton(p4, "check", this.commentToShow, "Crimson", null, null, 2);
 		
-		var b4 = inpuButton(p4, "check", "Check", "white", null, null, 2);
-		eventHandler2(b4, "onclick", function(){alert("This is not the complete solution.");});
-		var p5 = p(d, "padding-left:20px;"); 
-		var b5 = inpuButton(p5, "check", "Give up of lesson", "white", 2); 
+		var b4 = inpuButton(p4, "check", "Check", "Olive", null, null, 2);
+		eventHandler2(b4, "onclick", function(){
+			if(check()){
+				alert("Good!");
+				self.lesson.lessonEnded();
+				self.lesson.endLesson();
+			}
+			else {
+				alert("Try again!");
+				self.lesson.startExercise();
+			}
+		});
+		var b6 = inpuButton(p4, "check", "Reset lesson", "white", 2); b6.style.marginLeft = "15px"; 
+		eventHandler2(b6, "onclick", function(){self.lesson.startExercise();}); 
+		var b5 = inpuButton(p4, "check", "Give up of lesson", "white", 2); b5.style.marginLeft = "15px";
 		eventHandler2(b5, "onclick", function(){self.lesson.endLesson();});  
+
+		b4.onmouseout = function(event) {DynamicHTML.onMouseOverOlive(event)};
+		b4.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
+		b5.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b5.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
+		b6.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b6.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
+
+		var p5 = p(d, "padding-left:100%");
+		var desculpas = h1(d, "Página desformatada ao meter as peças! Não conseguimos achar a fonte do erro, pedimos desculpas.", 6);
+		desculpas.style.color = "black";
+
+		/*TODO: MUITO INCOMPLETO, teriamos que usar outro boleano que verificava se a resposta em cada divisão estava correta*/
+		function check() {
+			for (var i = 0; i < divisions.length; i++) {
+				if(divisions[i].isPossible == true){
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 }
 
@@ -1036,11 +1103,11 @@ function runLanguage(text) {
 			languageToUse = new LanguageExtraAlphabets(xmlDoc);
 		else   
 			languageToUse = new Language(xmlDoc);
-		}
-    else {
-    	alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
-    	screen0();
-    }
+	}
+	else {
+		alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
+		screen0();
+	}
 }
 
 function onLoad() {
