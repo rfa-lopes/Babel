@@ -98,6 +98,15 @@ function h1(target, text) {
 	return a;
 }
 
+function h2(target, text) {
+	var a = document.createElement("H2");
+	var b = document.createTextNode(text);
+	a.style.color = "SaddleBrown";
+	a.appendChild(b);
+	target.appendChild(a);
+	return a;
+}
+
 function h4(target, text) {
 	var a = document.createElement("H4");
 	var b = document.createTextNode(text);
@@ -279,8 +288,22 @@ function div3(target, style) { //Square
 	a.style.marginLeft = "20px";
 	a.style.marginBottom = "1em";
 	a.style.display = "inline-block";
-	a.style.height = "50px";
-	a.style.width = "80px";
+	a.style.height = "20px";
+	a.style.width = "40px";
+	a.style.borderRadius = "12px";
+	target.appendChild(a);
+	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
+	return a;    
+}
+
+function div4(target, style) { //Square
+	var a = document.createElement("DIV");
+	a.style = style;
+	a.style.marginLeft = "20px";
+	a.style.marginBottom = "1em";
+	a.style.display = "inline-block";
+	a.style.height = "5px";
+	a.style.width = "5px";
 	a.style.borderRadius = "12px";
 	target.appendChild(a);
 	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
@@ -434,7 +457,7 @@ class Lesson {
 	}
 }
 
-class SymbolsLesson {
+class SymbolsLesson{
 	constructor(xmlLessonInfo, parent) {
 		this.parent = parent;
 		this.saveExercises(xmlLessonInfo);
@@ -451,6 +474,11 @@ class SymbolsLesson {
 
 	startExercise(){
 		this.exercise.pageRendering();
+	}
+
+	endLesson(){
+		const self = this;
+		self.parent.startHomepageScreen();
 	}
 }
 
@@ -1083,9 +1111,52 @@ class Symbols extends Screen {
 
 	pageRendering() {
 		super.pageRendering();
+		var self = this;
 		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
 		h1(d, this.prompt+"  (Symbols Exercise)");
 
+		var latin = this.latin.split(" ");
+		var alphabet = this.alphabet.split(" ");
+
+		var p1 = p(d, "padding-left:10px;");
+		h1(p1,this.original);
+
+		var buttons = [];
+		var divisions = [];
+		var divisions2 = [];
+		var h = [];
+
+		var p2 = p(d, "padding-left:20px;");
+		for (var i = 0; i < alphabet.length; i++) {
+			divisions[i] = div4(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
+			h[i] = h2(divisions[i],latin[i]);
+		}
+		var p3 = p(d, "padding-left:20px;");
+		hr(p3);
+		for (var j = 0; j < latin.length; j++) {
+			const index = j;
+			divisions2[index] = div4(p3,"border:2px Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
+			buttons[index] =  inpuButton6(divisions2[index], index, alphabet[index], "");
+			buttons[index].draggable = "true";
+			eventHandler2(buttons[index], "ondragstart", function () {drag(event);});
+		}
+
+		for (var i = 0; i < latin.length; i++) {
+			const index = i;
+			divisions[index].isPossible = true;
+			//TODO complete
+			eventHandler2(divisions[index], "ondragstart", function () {drag(event);divisions[index].isPossible = true;});
+			eventHandler2(divisions[index], "ondragover", function () {if(divisions[index].isPossible) allowDrop(event);});
+			eventHandler2(divisions[index], "ondrop", function () {
+				drop(event);divisions[index].isPossible = false;
+				var indexToUse = event.dataTransfer.getData("text");
+				divisions[index].sol = buttons[indexToUse].value;
+			});
+		}
+
+		var p4 = p(d, "padding-left:20px;");
+		var b3 = inpuButton2(p4, "check", "Give up of lesson", "white");
+		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
 	}
 }
 
