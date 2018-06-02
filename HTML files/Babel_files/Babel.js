@@ -87,34 +87,19 @@ function eventHandler2(a, kind, action) { // funcao recomendada pelo prof no for
 	return a;
 }
 
-function h1(target, text) {
-	var a = document.createElement("H1");
+function h1(target, text, typeOf) {
+	var a = document.createElement("H"+typeOf);
 	var b = document.createTextNode(text);
 	a.appendChild(b);
 	target.appendChild(a);
 	a.align = "center";
-	a.style.color = "SaddleBrown";
-	a.style.textShadow = "0.5px 0.5px Olive";
-	return a;
-}
-
-function h2(target, text) {
-	var a = document.createElement("H2");
-	var b = document.createTextNode(text);
-	a.style.color = "SaddleBrown";
-	a.appendChild(b);
-	target.appendChild(a);
-	return a;
-}
-
-function h4(target, text) {
-	var a = document.createElement("H4");
-	var b = document.createTextNode(text);
-	a.appendChild(b);
-	target.appendChild(a);
-	a.style.color = "Tan";
-	a.style.textShadow = "0.5px 0.5px Salmon";
-	a.align = "center";
+	if(typeOf == 1){
+		a.style.color = "SaddleBrown";
+		a.style.textShadow = "0.5px 0.5px Olive";
+	}else{
+		a.style.color = "Tan";
+		a.style.textShadow = "0.5px 0.5px Salmon";
+	}
 	return a;
 }
 
@@ -165,78 +150,47 @@ function inputActiveText(target, id, size, fsize, placeholder) {
 	return a;
 }    
 
-function inpuButton(target, id, value, color) {
+function inpuButton(target, id, value, color, txtColor, bordercolor, typeOf) {
 	var a = document.createElement("INPUT");
 	a.type = "button";
 	a.id = id;
 	a.value = value;
 	a.style.backgroundColor = color;
+	if(typeOf == 2){
+		a.style.cursor = "pointer";
+		a.style.border = "2px solid Tan";
+		a.style.margin = "10px";
+		a.style.padding = "15px 15px";
+		a.style.borderRadius = "12px";
+	}else if (typeOf == 3){
+		a.style.marginTop = "30px";
+		a.style.cursor = "pointer";
+		a.style.color = txtColor;
+		a.style.padding = "20px 46px";
+		a.textAlign = "center";
+		a.style.borderRadius = "12px";
+		a.style.border = "2px solid Tan";
+	}else if (typeOf == 4){
+		a.style.cursor = "pointer";
+		a.style.border = "2px solid Brown";
+		a.style.margin = "10px";
+		a.style.padding = "15px 15px";
+		a.style.borderRadius = "12px";
+	}else if (typeOf == 5){
+		a.style.border = "5px solid "+bordercolor;
+		a.style.margin = "10px";
+		a.style.padding = "15px 15px";
+		a.style.borderRadius = "12px";
+	}else{ //typeOf == 6
+		a.style.border = "5px solid "+bordercolor;
+		a.style.padding = "15px 15px";
+		a.style.borderRadius = "12px";
+	}
 	target.appendChild(a);
 	return a;
 }
-
-function inpuButton2(target, id, value, color) {
-	var a = document.createElement("INPUT");
-	a.type = "button";
-	a.id = id;
-	a.value = value;
-	a.style.cursor = "pointer";
-	a.style.backgroundColor = color;
-	a.style.border = "2px solid Tan";
-	a.style.margin = "10px";
-	a.style.padding = "15px 15px";
-	a.style.borderRadius = "12px";
-	target.appendChild(a);
-	return a;
-}
-
-function inpuButton3(target, id, value, color, txtColor) {
-	var a = document.createElement("INPUT");
-	a.type = "button";
-	a.id = id;
-	a.value = value;
-	a.style.backgroundColor = color;
-	a.style.marginTop = "30px";
-	a.style.cursor = "pointer";
-	a.style.color = txtColor;
-	a.style.padding = "20px 46px";
-	target.appendChild(a);
-	a.textAlign = "center";
-	a.style.borderRadius = "12px";
-	a.style.border = "2px solid Tan";
-	return a;
-}
-
-function inpuButton4(target, id, value, color) {
-	var a = document.createElement("INPUT");
-	a.type = "button";
-	a.id = id;
-	a.style.cursor = "pointer";
-	a.value = value;
-	a.style.backgroundColor = color;
-	a.style.border = "2px solid Brown";
-	a.style.margin = "10px";
-	a.style.padding = "15px 15px";
-	a.style.borderRadius = "12px";
-	target.appendChild(a);
-	return a;
-}
-
-function inpuButton5(target, id, value, color,bordercolor) {
-	var a = document.createElement("INPUT");
-	a.type = "button";
-	a.id = id;
-	a.value = value;
-	a.style.backgroundColor = color;
-	a.style.border = "5px solid "+bordercolor;
-	a.style.margin = "10px";
-	a.style.padding = "15px 15px";
-	a.style.borderRadius = "12px";
-	target.appendChild(a);
-	return a;
-}
-
-function inpuButton6(target, id, value, color,bordercolor) {
+   
+  function inpuButton6(target, id, value, color,bordercolor) {
 	var a = document.createElement("INPUT");
 	a.type = "button";
 	a.id = id;
@@ -247,7 +201,7 @@ function inpuButton6(target, id, value, color,bordercolor) {
 	a.style.borderRadius = "12px";
 	target.appendChild(a);
 	return a;
-}
+  }
 
 function inpuFile(target, id, ) {
 	var a = document.createElement("INPUT");
@@ -257,55 +211,37 @@ function inpuFile(target, id, ) {
 	return a;
 }
 
-function div(target, style) {
+function div(target, style, typeOf) {
 	var a = document.createElement("DIV");
 	a.style = style;
 	target.appendChild(a);
-	a.style.borderRadius = "30px";
-	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
-	return a;    
-}
-
-function div2(target, style) { //Circle
-	var a = document.createElement("DIV");
-	a.style = style;
-	a.style.display = "table"; 
-	a.style.padding = "20px"; 
-	a.style.marginLeft = "40px";
-	a.style.marginBottom = "2em";
-	a.style.display = "inline-block";
-	a.style.height = "200px";
-	a.style.width = "200px";
-	a.style.borderRadius = "50%";
-	target.appendChild(a);
-	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
-	return a;    
-}
-
-function div3(target, style) { //Square
-	var a = document.createElement("DIV");
-	a.style = style;
-	a.style.marginLeft = "20px";
-	a.style.marginBottom = "1em";
-	a.style.display = "inline-block";
-	a.style.height = "20px";
-	a.style.width = "40px";
-	a.style.borderRadius = "12px";
-	target.appendChild(a);
-	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
-	return a;    
-}
-
-function div4(target, style) { //Square
-	var a = document.createElement("DIV");
-	a.style = style;
-	a.style.marginLeft = "20px";
-	a.style.marginBottom = "1em";
-	a.style.display = "inline-block";
-	a.style.height = "5px";
-	a.style.width = "5px";
-	a.style.borderRadius = "12px";
-	target.appendChild(a);
+	if(typeOf == 1){
+		a.style.borderRadius = "30px";
+	}else if (typeOf == 2){ //Circle
+		a.style.display = "table"; 
+		a.style.padding = "20px"; 
+		a.style.marginLeft = "40px";
+		a.style.marginBottom = "2em";
+		a.style.display = "inline-block";
+		a.style.height = "200px";
+		a.style.width = "200px";
+		a.style.borderRadius = "50%";
+	}else if(typeOf == 3) { //Square
+		a.style = style;
+		a.style.marginLeft = "20px";
+		a.style.marginBottom = "1em";
+		a.style.display = "inline-block";
+		a.style.height = "20px"; 
+  		a.style.width = "40px"; 
+		a.style.borderRadius = "12px";
+	}else{
+		a.style.marginLeft = "20px"; 
+  		a.style.marginBottom = "1em"; 
+  		a.style.display = "inline-block"; 
+  		a.style.height = "5px"; 
+  		a.style.width = "5px"; 
+  		a.style.borderRadius = "12px"; 
+	}
 	a.style.boxShadow = "0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)";
 	return a;    
 }
@@ -320,8 +256,65 @@ function screen0() {
 	eventHandler(f, "onchange", "processLocalFile(event, runLanguage);");
 }
 
-function isLanguageExtraAlphabets(){
-	return (xmlDoc.getElementsByTagName("CLASS")[0].childNodes[0].nodeValue == "LanguageExtraAlphabets"); 
+class DynamicHTML {
+	constructor() {}
+	//DynamicHTML.isLanguageExtraAlphabets()
+	static isLanguageExtraAlphabets(){
+		return (xmlDoc.getElementsByTagName("CLASS")[0].childNodes[0].nodeValue == "LanguageExtraAlphabets"); 
+	}
+	//function(event) {DynamicHTML.onMouseOutWhite(event);};
+	static onMouseOutWhite(event) {
+		event.target.style.backgroundColor = 'white';
+		event.target.style.color = "";
+		event.target.style.boxShadow = "";
+	}
+	//function(event) {DynamicHTML.onMouseOutFireBrick(event);};
+	static onMouseOutFireBrick (event) {
+		event.target.style.backgroundColor = 'white';
+		event.target.style.color = "FireBrick";
+		event.target.style.boxShadow = "";
+	}
+	//function(event) {DynamicHTML.onMouseOverFireBrick(event);};
+	static onMouseOverFireBrick (event) {
+		event.target.style.backgroundColor = 'FireBrick';
+		event.target.style.color = "white";
+		event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+	}
+	//function(event) {DynamicHTML.onMouseOverOlive(event);};
+	static onMouseOverOlive (event) {
+		event.target.style.backgroundColor = 'Olive';
+		event.target.style.color = "white";
+		event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+	}
+	//function(event) {DynamicHTML.onMouseOverPeru(event);};
+	static onMouseOverPeru (event) {
+		event.target.style.backgroundColor = 'Peru';
+		event.target.style.color = "white";
+		event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+	}
+	//function(event) {DynamicHTML.onMouseOverBoolean(event, );};
+	static onMouseOverBoolean (event,boolean1) {
+		if(boolean1)
+			event.target.style.backgroundColor = 'Olive';
+		else
+			event.target.style.backgroundColor = 'Crimson';
+		event.target.style.color = "white";
+		event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
+	}
+	//DynamicHTML.drag(event)
+	static drag(event){
+		event.dataTransfer.setData("text", event.target.id);
+	}
+	//DynamicHTML.allowDrop(event)
+	static allowDrop(event){
+		event.preventDefault();
+	}
+	//DynamicHTML.drop(event)
+	static drop(event){
+		event.preventDefault();
+		var data = event.dataTransfer.getData("text");
+		event.target.appendChild(document.getElementById(data));
+	}
 }
 
 class Language {
@@ -385,12 +378,7 @@ class LanguageExtraAlphabets extends Language {
 		return this.symbolsLessons[index];
 	}
 }
-/*
-class DynamicHTML {
-    constructor() {}
-    // para criar buttons com static functions
-}
-*/
+
 class Lesson {
 	constructor(xmlLessonInfo, parent) {
 		this.parent = parent;
@@ -457,7 +445,7 @@ class Lesson {
 	}
 }
 
-class SymbolsLesson{
+class SymbolsLesson {
 	constructor(xmlLessonInfo, parent) {
 		this.parent = parent;
 		this.saveExercises(xmlLessonInfo);
@@ -476,10 +464,10 @@ class SymbolsLesson{
 		this.exercise.pageRendering();
 	}
 
-	endLesson(){
-		const self = this;
-		self.parent.startHomepageScreen();
-	}
+	endLesson(){ 
+		const self = this; 
+		self.parent.startHomepageScreen(); 
+	  } 
 }
 
 /*Screen abstract class*/
@@ -503,7 +491,7 @@ class HomePage extends Screen {
 	pageRendering() {
 		super.pageRendering();
 
-		h1(this.body, "Choose the lesson you want to do:");
+		h1(this.body, "Choose the lesson you want to do:", 1);
 		var buttons = [];
 
 		for (var i = 0; i < this.numLessons;i++) {
@@ -514,29 +502,19 @@ class HomePage extends Screen {
 			var nrExercises = self.parent.getLesson(index).getNumberExercises();
 
 			if(concludedExercises == nrExercises){
-				var d = div2(this.body, "border:8px solid Olive;");
+				var d = div(this.body, "border:8px solid Olive;", 2);
 			}else if (concludedExercises > 0){
-				var d = div2(this.body, "border:8px solid Orange;");
+				var d = div(this.body, "border:8px solid Orange;", 2);
 			}else{
-				var d = div2(this.body, "border:2px solid SaddleBrown;");
+				var d = div(this.body, "border:2px solid SaddleBrown;", 2);
 			}
 
 			var p2 = p(d, "padding-left:20px;");
-			buttons[i] = inpuButton3(p2, "Check", "Lesson: "+(i+1), "white", "FireBrick");
-			var h0 = h4(d, "Completed Exercises: "+concludedExercises+"/"+nrExercises);	
-
-			buttons[i].onmouseover = function(event) {
-				event.target.style.backgroundColor = 'Peru';
-				event.target.style.color = "white";
-				event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-			};
-
-			buttons[i].onmouseout = function(event) {
-				event.target.style.backgroundColor = 'white';
-				event.target.style.color = "FireBrick";
-				event.target.style.boxShadow = "";
-			};
-
+			buttons[i] = inpuButton(p2, "Check", "Lesson: "+(i+1), "white", "FireBrick", null, 3);
+			var h0 = h1(d, "Completed Exercises: "+concludedExercises+"/"+nrExercises, 4);	
+			
+			buttons[i].onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
+			buttons[i].onmouseout = function(event) {DynamicHTML.onMouseOutFireBrick(event);};
 			eventHandler2(buttons[i], "onclick", function () {self.parent.startLesson(index);});
 
 			if(concludedExercises == nrExercises){
@@ -550,31 +528,22 @@ class HomePage extends Screen {
 		var symButtons = [];
 		for(var w = 0; w < this.numSymbolsLessons; w++){
 			const self = this;
-			var d = div2(this.body, "border:2px solid SaddleBrown;");
+			var d = div(this.body, "border:2px solid SaddleBrown;", 2);
 			var p3 = p(d, "padding-left:20px;");
-			symButtons[w] = inpuButton3(p3, "Check", "Symbols: "+(w+1), "white", "FireBrick");
+			symButtons[w] = inpuButton(p3, "Check", "Symbols: "+(w+1), "white", "FireBrick", null, 3);
 			const indexw = w;
 			if(self.parent.getSymbolsLesson(indexw).isSymbolsLessonComplet()){
-				var hs = h4(d, "Completed!");
+				var hs = h1(d, "Completed!", 4);
 				hs.style.color = "Olive";
 				symButtons[w].disabled = true;
 				d.style.border = "8px solid Olive";
 			}else{
-				var hs = h4(d, "Not Completed!");
+				var hs = h1(d, "Not Completed!", 4);
 				hs.style.color = "Peru";
 			}
 
-			symButtons[indexw].onmouseout = function(event) {
-				event.target.style.backgroundColor = 'white';
-				event.target.style.color = "FireBrick";
-				event.target.style.boxShadow = "";
-			};
-
-			symButtons[indexw].onmouseover = function(event) {
-				event.target.style.backgroundColor = 'FireBrick';
-				event.target.style.color = "white";
-				event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-			};
+			symButtons[indexw].onmouseout = function(event) {DynamicHTML.onMouseOutFireBrick(event);};
+			symButtons[indexw].onmouseover = function(event) {DynamicHTML.onMouseOverFireBrick(event);};
 			eventHandler2(symButtons[indexw], "onclick", function () {self.parent.getSymbolsLesson(indexw).startExercise();})
 		}
 	}
@@ -590,43 +559,23 @@ class endLessonScreen extends Screen { //Last Screen
 		var d;
 		var self = this;
 		if(this.lesson.getConcludedExercises() == this.lesson.getNumberExercises()){
-			d = div(this.body, "border:3px solid green; display:table; padding:20px; margin-left:30%;margin-top:10%");
-			h1(d,"Very well! Conclude this lesson successfully.");
+			d = div(this.body, "border:3px solid green; display:table; padding:20px; margin-left:30%;margin-top:10%", 1);
+			h1(d,"Very well! Conclude this lesson successfully.", 1);
 			var p1 = p(d, "padding-left:36%;");
-			var b = inpuButton4(p1, "check", "Go to Home page", "white");
+			var b = inpuButton(p1, "check", "Go to Home page", "white", null, null, 4);
 		}else{
-			d = div(this.body, "border:3px solid Crimson; display:table; padding:20px 30px; margin-left:25%;margin-top:10%");
-			h1(d,"Not over yet! Want to repeat this lesson?");
+			d = div(this.body, "border:3px solid Crimson; display:table; padding:20px 30px; margin-left:25%;margin-top:10%", 1);
+			h1(d,"Not over yet! Want to repeat this lesson?", 1);
 			var p1 = p(d, "padding-left:25%;");
-			var b1 = inpuButton4(p1, "check", "Yes!", "white");
+			var b1 = inpuButton(p1, "check", "Yes!", "white", null, null, 4);
 			eventHandler2(b1, "onclick", function(){self.lesson.getfirstExercise();});
-			var b = inpuButton4(p1, "check", "No! Go to Home page", "white");
+			var b = inpuButton(p1, "check", "No! Go to Home page", "white", null, null, 4);
 		}
 		eventHandler2(b, "onclick", function(){self.lesson.nextExercise();});
-
-		b1.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b1.onmouseover = function(event) {
-			event.target.style.backgroundColor = 'Olive';
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
-
-		b.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b.onmouseover = function(event) {
-			event.target.style.backgroundColor = 'Peru';
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
+		b1.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b1.onmouseover = function(event) {DynamicHTML.onMouseOverOlive(event);};
+		b.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
 	}
 }
 
@@ -661,8 +610,8 @@ class Keyboard extends Screen { //Keybord Exercise
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
-		h1(d, this.prompt);
+		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px;", 1);
+		h1(d, this.prompt, 1);
 
 		const self = this;
 		var p1 = p(d, "padding-left:40px; word-spacing:50px;");
@@ -683,7 +632,7 @@ class Keyboard extends Screen { //Keybord Exercise
 
 		eventHandler(i, "onkeydown", "if(event.keyCode == 13) document.getElementById('check').click();");
 		text(p2, 16, " ");
-		var b1 = inpuButton2(p2, "check", "Check", "white");
+		var b1 = inpuButton(p2, "check", "Check", "white", null, null, 2);
 
 		eventHandler2(b1, "onclick", function() {
 			concludedExercise = validate(document.getElementById('answer').value, self.translations);
@@ -704,48 +653,16 @@ class Keyboard extends Screen { //Keybord Exercise
 			}
 			b1.style.color = "white";
 		});
-		var b2 = inpuButton2(p3, "check", "Next exercise ->", "white");
-		var b3 = inpuButton2(p3, "check", "Give up of lesson", "white");
+		var b2 = inpuButton(p3, "check", "Next exercise ->", "white", null, null, 2);
+		var b3 = inpuButton(p3, "check", "Give up of lesson", "white", null, null, 2);
 
-		b2.onmouseover = function(event) {
-			if(b1.value == "Good!"){
-				event.target.style.backgroundColor = 'Olive';
-			}else{
-				event.target.style.backgroundColor = 'Crimson';
-			}
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
+		b2.onmouseover = function(event) {DynamicHTML.onMouseOverBoolean(event, b1.value == "Good!");};
+		b2.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b3.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b3.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
+		b1.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b1.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
 
-		b2.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b3.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b3.onmouseover = function(event) {
-			event.target.style.backgroundColor = 'Peru';
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
-
-		b1.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b1.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
 		var t = text(p5, 20, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
@@ -777,8 +694,8 @@ class Pairs extends Screen { //Pairs Exercise
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px");
-		h1(d, this.prompt);
+		var d = div(this.body, "border:5px solid SaddleBrown; display:table; padding:20px; margin-left:40px", 1);
+		h1(d, this.prompt, 1);
 		const self = this;
 		var words = this.original.split(" ");
 		var solutions = this.solution.split(" ");
@@ -789,7 +706,7 @@ class Pairs extends Screen { //Pairs Exercise
 		var failsCount = 0;
 		var tentativas = 3;
 		for (var i = 0; i < words.length; i++) {
-			buttons[i] = inpuButton4(p1, "Check",words[i], "white");
+			buttons[i] = inpuButton(p1, "Check",words[i], "white", null, null, 4);
 			const index = i;
 			eventHandler2(buttons[i], "onclick", function () {
 				if (aux == undefined){
@@ -851,7 +768,7 @@ class Pairs extends Screen { //Pairs Exercise
 						if(i%2 == 0)
 							sol += solutions[i]+" -> "+solutions[i+1]+"  /  ";
 					}
-					var b0 = inpuButton5(p2, "check",sol , "white", "Olive");
+					var b0 = inpuButton(p2, "check",sol , "white", null, "Olive", 5);
 				}else{
 					var concludedExercise = true;
 					for (var i = 0; i < buttons.length; i++) {
@@ -874,56 +791,20 @@ class Pairs extends Screen { //Pairs Exercise
 		}
 		var p2 = p(d, "padding-left:20px;");
 		var p3 = p(d, "padding-left:50%;");
-		var b2 = inpuButton2(p2, "check", "Next exercise ->", "white");
-		var b3 = inpuButton2(p2, "check", "Give up of lesson", "white");
-		var nt = inpuButton5(p2, "check","Has "+(tentativas)+" attempts!" , "white","Olive");
+		var b2 = inpuButton(p2, "check", "Next exercise ->", "white", null, null, 2);
+		var b3 = inpuButton(p2, "check", "Give up of lesson", "white", null, null, 2);
+		var nt = inpuButton(p2, "check","Has "+(tentativas)+" attempts!" , "white", null, "Olive" ,5);
 
-		b2.onmouseover = function(event) {
-			if(nt.value == "Good!"){
-				event.target.style.backgroundColor = 'Olive';
-			}else{
-				event.target.style.backgroundColor = 'Crimson';
-			}
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
+		b2.onmouseover = function(event) {DynamicHTML.onMouseOverBoolean(event, nt.value == "Good!");};
+		b2.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b3.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b3.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
 
-		b2.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b3.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b3.onmouseover = function(event) {
-			event.target.style.backgroundColor = 'Peru';
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
 		var t = text(p3, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
 		hr(this.body);
 	}
-}
-
-function drag(event1){
-	event1.dataTransfer.setData("text", event1.target.id);
-}
-
-function drop(event1){
-	event1.preventDefault();
-	var data = event1.dataTransfer.getData("text");
-	event1.target.appendChild(document.getElementById(data));
-}
-
-function allowDrop(event1){
-	event1.preventDefault();
 }
 
 class Blocks extends Screen { //Blocks exercise
@@ -955,14 +836,14 @@ class Blocks extends Screen { //Blocks exercise
 
 	pageRendering() {
 		super.pageRendering();
-		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
-		h1(d, this.prompt);
+		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;", 1);
+		h1(d, this.prompt, 1);
 
 		var blocks = this.block.split(" ");
 		var solutions = this.solution.split(" ");
 
 		var p1 = p(d, "padding-left:10px;");
-		h1(p1,this.original);
+		h1(p1,this.original, 1);
 
 		var buttons = [];
 		var divisions = [];
@@ -970,26 +851,25 @@ class Blocks extends Screen { //Blocks exercise
 
 		var p2 = p(d, "padding-left:20px;");
 		for (var i = 0; i < solutions.length; i++) {
-			divisions[i] = div3(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
+			divisions[i] = div(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;", 3);
 		}
 		var p3 = p(d, "padding-left:20px;");
 		hr(p3);
 		for (var j = 0; j < blocks.length; j++) {
 			const index = j;
-			divisions2[index] = div3(p3,"border:2px Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
-			buttons[index] =  inpuButton6(divisions2[index], index, blocks[index], "");
+			divisions2[index] = div(p3,"border:2px Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;", 3);
+			buttons[index] =  inpuButton(divisions2[index], index, blocks[index], null,"", 6);
 			buttons[index].draggable = "true";
-			eventHandler2(buttons[index], "ondragstart", function () {drag(event);});
+			eventHandler2(buttons[index], "ondragstart", function () {DynamicHTML.drag(event);});
 		}
 
 		for (var i = 0; i < solutions.length; i++) {
 			const index = i;
 			divisions[index].isPossible = true;
-			//TODO complete
-			eventHandler2(divisions[index], "ondragstart", function () {drag(event);divisions[index].isPossible = true;});
-			eventHandler2(divisions[index], "ondragover", function () {if(divisions[index].isPossible) allowDrop(event);});
+			eventHandler2(divisions[index], "ondragstart", function () {DynamicHTML.drag(event);divisions[index].isPossible = true;});
+			eventHandler2(divisions[index], "ondragover", function () {if(divisions[index].isPossible) DynamicHTML.allowDrop(event);});
 			eventHandler2(divisions[index], "ondrop", function () {
-				drop(event);divisions[index].isPossible = false;
+				DynamicHTML.drop(event);divisions[index].isPossible = false;
 				var indexToUse = event.dataTransfer.getData("text");
 				divisions[index].sol = buttons[indexToUse].value;
 			});
@@ -998,7 +878,7 @@ class Blocks extends Screen { //Blocks exercise
 		var p4 = p(d, "padding-left:20px;");
 		var p5 = p(d, "padding-left:50%;");
 		const self = this;
-		var b4 = inpuButton2(p4, "check", "Check", "white");
+		var b4 = inpuButton(p4, "check", "Check", "white", null, null, 2);
 		eventHandler2(b4, "onclick", function(){
 			var sucess = true;
 			for (var i = 0; i < solutions.length; i++) {
@@ -1015,7 +895,7 @@ class Blocks extends Screen { //Blocks exercise
 				b4.style.color = "white";
 				b4.value = "Failed";
 				sucess = false;
-				var b0 = inpuButton3(p4, "check","This is the correct answer: "+self.solution , "white");
+				var b0 = inpuButton(p4, "check","This is the correct answer: "+self.solution , "white", null, 3);
 				b0.style.border = "4px solid Olive ";
 				d.style.border = "4px solid Crimson ";
 				play("general/wrong_answer.mp3");
@@ -1032,37 +912,15 @@ class Blocks extends Screen { //Blocks exercise
 		});
 
 		var t = text(p5, 15, self.lesson.getExerciseIndex()+" in "+self.lesson.getNumberExercises());
-		var b2 = inpuButton2(p4, "check", "Next exercise ->", "white");
+		var b2 = inpuButton(p4, "check", "Next exercise ->", "white", null, null, 2);
 		eventHandler2(b2, "onclick", function(){self.lesson.nextExercise();});
-		var b3 = inpuButton2(p4, "check", "Give up of lesson", "white");
+		var b3 = inpuButton(p4, "check", "Give up of lesson", "white", null, null, 2);
 		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
 
-		b2.onmouseover = function(event) {
-			if(b4.value == "Good!")
-				event.target.style.backgroundColor = 'Olive';
-			else event.target.style.backgroundColor = 'Crimson';
-			
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
-
-		b2.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b3.onmouseout = function(event) {
-			event.target.style.backgroundColor = 'white';
-			event.target.style.color = "";
-			event.target.style.boxShadow = "";
-		};
-
-		b3.onmouseover = function(event) {
-			event.target.style.backgroundColor = 'Peru';
-			event.target.style.color = "white";
-			event.target.style.boxShadow = " 0 2px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19)";
-		};
+		b2.onmouseover = function(event) {DynamicHTML.onMouseOverBoolean(event, b4.value == "Good!");};
+		b2.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b3.onmouseout = function(event) {DynamicHTML.onMouseOutWhite(event)};
+		b3.onmouseover = function(event) {DynamicHTML.onMouseOverPeru(event);};
 	}
 }
 
@@ -1081,7 +939,6 @@ class Symbols extends Screen {
 	symbolsSymbName(xmlSymbols) {
 		this.symbName = xmlSymbols.getElementsByTagName("SYMBNAME")[0].childNodes[0].nodeValue;
 	}
-
 
 	symbolsPrompt(xmlSymbols) {
 		this.prompt = null;
@@ -1112,51 +969,50 @@ class Symbols extends Screen {
 	pageRendering() {
 		super.pageRendering();
 		var self = this;
-		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;");
-		h1(d, this.prompt+"  (Symbols Exercise)");
-
-		var latin = this.latin.split(" ");
-		var alphabet = this.alphabet.split(" ");
-
-		var p1 = p(d, "padding-left:10px;");
-		h1(p1,this.original);
-
-		var buttons = [];
-		var divisions = [];
-		var divisions2 = [];
-		var h = [];
-
-		var p2 = p(d, "padding-left:20px;");
-		for (var i = 0; i < alphabet.length; i++) {
-			divisions[i] = div4(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
-			h[i] = h2(divisions[i],latin[i]);
-		}
-		var p3 = p(d, "padding-left:20px;");
-		hr(p3);
-		for (var j = 0; j < latin.length; j++) {
-			const index = j;
-			divisions2[index] = div4(p3,"border:2px Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;");
-			buttons[index] =  inpuButton6(divisions2[index], index, alphabet[index], "");
-			buttons[index].draggable = "true";
-			eventHandler2(buttons[index], "ondragstart", function () {drag(event);});
-		}
-
-		for (var i = 0; i < latin.length; i++) {
-			const index = i;
-			divisions[index].isPossible = true;
-			//TODO complete
-			eventHandler2(divisions[index], "ondragstart", function () {drag(event);divisions[index].isPossible = true;});
-			eventHandler2(divisions[index], "ondragover", function () {if(divisions[index].isPossible) allowDrop(event);});
-			eventHandler2(divisions[index], "ondrop", function () {
-				drop(event);divisions[index].isPossible = false;
-				var indexToUse = event.dataTransfer.getData("text");
-				divisions[index].sol = buttons[indexToUse].value;
-			});
-		}
-
-		var p4 = p(d, "padding-left:20px;");
-		var b3 = inpuButton2(p4, "check", "Give up of lesson", "white");
-		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});
+		var d = div(this.body, "border:3px solid SaddleBrown; display:table; padding:20px; margin-left:40px;", 1);
+		h1(d, this.symbName+"  - Practice", 1);
+		if(this.prompt != null)
+			h1(d, this.prompt, 1);
+		 
+		var latin = this.latin.split(" "); 
+		var alphabet = this.alphabet.split(" ");  
+		
+		var buttons = []; 
+		var divisions = []; 
+		var divisions2 = []; 
+		var headers = []; 
+		
+		var p2 = p(d, "padding-left:20px;"); 
+		for (var i = 0; i < alphabet.length; i++) { 
+			divisions[i] = div(p2,"border:1px solid Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;", 4); 
+			headers[i] = h1(divisions[i],latin[i], 2); 
+		} 
+		var p3 = p(d, "padding-left:20px;"); 
+		hr(p3); 
+		for (var j = 0; j < latin.length; j++) { 
+			const index = j; 
+			divisions2[index] = div(p3,"border:2px Tan;display:table; padding:15px 30px; margin: 10px;display: inline-block;" ,4); 
+			buttons[index] =  inpuButton(divisions2[index], index, alphabet[index], null, "", 6); 
+			buttons[index].draggable = "true"; 
+			eventHandler2(buttons[index], "ondragstart", function () {DynamicHTML.drag(event);}); 
+		} 
+		
+		for (var i = 0; i < latin.length; i++) { 
+			const index = i; 
+			divisions[index].isPossible = true; 
+			//TODO complete 
+			eventHandler2(divisions[index], "ondragstart", function () {DynamicHTML.drag(event); divisions[index].isPossible = true;}); 
+			eventHandler2(divisions[index], "ondragover", function () {if(divisions[index].isPossible) DynamicHTML.allowDrop(event);}); 
+			eventHandler2(divisions[index], "ondrop", function () { 
+			DynamicHTML.drop(event);divisions[index].isPossible = false; 
+			var indexToUse = event.dataTransfer.getData("text"); 
+			divisions[index].sol = buttons[indexToUse].value; 
+			}); 
+		} 
+		
+		var p4 = p(d, "padding-left:20px;"); 
+		var b3 = inpuButton(p4, "check", "Give up of lesson", "white", 2); 
+		eventHandler2(b3, "onclick", function(){self.lesson.endLesson();});  
 	}
 }
 
@@ -1164,16 +1020,16 @@ function runLanguage(text) {
 	var table="<tr><th>Title</th><th>Artist</th></tr>";
     xmlDoc = text2XML(text);  // assignement to global
     xmlSerializer = new XMLSerializer();  // assignement to global
-        // https://www.w3schools.com/xml/dom_nodes_get.asp
-        var nodes = xmlDoc.getElementsByTagName("LANGNAME");
-        if( nodes.length == 1 ) {
-        languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
-        var languageToUse;
-        if(isLanguageExtraAlphabets())
-        	languageToUse = new LanguageExtraAlphabets(xmlDoc);
-        else   
-        	languageToUse = new Language(xmlDoc);
-    }
+	// https://www.w3schools.com/xml/dom_nodes_get.asp
+	var nodes = xmlDoc.getElementsByTagName("LANGNAME");
+	if( nodes.length == 1 ) {
+		languageName = nodes[0].childNodes[0].nodeValue;  // assignement to global
+		var languageToUse;
+		if(DynamicHTML.isLanguageExtraAlphabets())
+			languageToUse = new LanguageExtraAlphabets(xmlDoc);
+		else   
+			languageToUse = new Language(xmlDoc);
+		}
     else {
     	alert('ERROR: Not a language file!\nPLEASE, TRY AGAIN!');
     	screen0();

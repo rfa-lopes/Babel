@@ -13,14 +13,9 @@ disponíveis, a que pretendemos realizar
 
 --------------------------------------------------------------------------------
 
-dynamicHtml serve para guardar métodos  static como a criação dos botões
 
 A fazer :
-Acerca de uma licao:
-- mostrar a solucao do exercicio caso o utilizador o falhe e guarda-lo para o apresentar de novo no final, 
-    para o utilizador verificar se já aprendeu ! (falta pairs e keyboard)
 
--melhorar o blockes
+- trocar botao com numero de tentativas para text (??)
 
-- analisar codigo e ver o que mais pode ser colocado em classes
 
